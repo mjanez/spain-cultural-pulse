@@ -70,24 +70,19 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
       maxDiff = Math.max(...scores.map(s => s.diff));
     }
 
-    const getColor = (diff: number | undefined) => {
+    const getColor = (diff: number | undefined, regionName?: string) => {
       if (diff === undefined) return '#334155';
       
-      // Fórmula exponencial para mayor diferenciación visual: 95% para diff=0, 30% para maxDistance
-      const normalizedDiff = diff / maxDistance; // 0 a 1
-      const matchPercentage = Math.max(30, Math.min(100, 95 - (normalizedDiff * normalizedDiff * 65)));
+      // Normalizar diff entre 0 (más afín) y 1 (menos afín)
+      const normalized = (diff - minDiff) / (maxDiff - minDiff);
       
-      // Convert to intensity (0-1, where 1 is best match)
-      // Normalizar de 30-95% a 0-1
-      const intensity = (matchPercentage - 30) / 65;
+      // Gradiente de verde oscuro (más afín) a verde claro (menos afín)
+      // Verde oscuro: rgb(5, 150, 105) -> Verde claro: rgb(134, 239, 172)
+      const r = Math.round(5 + (134 - 5) * normalized);
+      const g = Math.round(150 + (239 - 150) * normalized);
+      const b = Math.round(105 + (172 - 105) * normalized);
       
-      // Enhanced gradient for better visual differentiation
-      // Using HSL: Hue 330 (pink/magenta)
-      // Higher match = more saturated and much darker for better contrast
-      const saturation = 50 + (intensity * 45); // 50-95%
-      const lightness = 75 - (intensity * 65); // 75% (very light) to 10% (very dark)
-      
-      return `hsl(330, ${saturation}%, ${lightness}%)`;
+      return `rgb(${r}, ${g}, ${b})`;
     };
 
     // Create map
@@ -111,14 +106,19 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
         const geoName = feature?.properties?.name;
         const profileName = GEOJSON_TO_PROFILE_NAME[geoName];
         const diff = profileName ? scoreMap[profileName] : undefined;
+        
+        // Encontrar la posición de esta región en el ranking
+        const sortedScores = [...scores].sort((a, b) => a.diff - b.diff);
+        const position = sortedScores.findIndex(s => s.region === profileName) + 1;
+        const isTopOne = position === 1;
 
         return {
-          fillColor: getColor(diff),
-          weight: 1,
+          fillColor: getColor(diff, profileName),
+          weight: isTopOne ? 3 : 1,
           opacity: 1,
-          color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7
+          color: isTopOne ? '#e2ee34ff' : 'white', // Borde verde para la #1
+          dashArray: isTopOne ? '' : '3',
+          fillOpacity: isTopOne ? 0.95 : 0.7
         };
       },
       onEachFeature: (feature, layer) => {
@@ -127,10 +127,17 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
         const diff = profileName ? scoreMap[profileName] : undefined;
         
         if (profileName && diff !== undefined) {
-          // Fórmula exponencial consistente con getColor
-          const normalizedDiff = diff / maxDistance;
-          const matchPercentage = Math.max(30, Math.min(100, 95 - (normalizedDiff * normalizedDiff * 65))).toFixed(1);
-          layer.bindTooltip(`${profileName}: ${matchPercentage}% Match`, {
+          // Encontrar la posición de esta región en el ranking
+          const sortedScores = [...scores].sort((a, b) => a.diff - b.diff);
+          const position = sortedScores.findIndex(s => s.region === profileName) + 1;
+          const totalRegions = sortedScores.length;
+          
+          // Calcular grado de afinidad (1 es máxima, 19 es mínima)
+          const affinityScore = Math.round(1 + ((position - 1) / (totalRegions - 1)) * 18) || 1;
+          
+          const affinityLabel = `#${position} - Afinidad: ${affinityScore}/19`;
+            
+          layer.bindTooltip(`${profileName}<br/>${affinityLabel}`, {
             sticky: true,
             direction: 'top'
           });
