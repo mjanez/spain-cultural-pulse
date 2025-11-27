@@ -38,6 +38,20 @@ npm install
 npm run dev
 ```
 
+## Deployment
+
+The project automatically deploys to GitHub Pages via GitHub Actions when pushing to the `main` branch.
+
+**Required setup:**
+1. Go to Settings → Pages on GitHub
+2. Source: GitHub Actions
+3. Site will be available at: `https://[username].github.io/spain-cultural-pulse`
+
+**Manual deploy:**
+```bash
+npm run build
+```
+
 ---
 
 *[Versión en español](README.md)*

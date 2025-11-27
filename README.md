@@ -38,6 +38,20 @@ npm install
 npm run dev
 ```
 
+## Despliegue
+
+El proyecto se despliega automáticamente en GitHub Pages mediante GitHub Actions cuando se hace push a la rama `main`.
+
+**Configuración necesaria:**
+1. Ir a Settings → Pages en GitHub
+2. Source: GitHub Actions
+3. El sitio estará disponible en: `https://[usuario].github.io/spain-cultural-pulse`
+
+**Deploy manual:**
+```bash
+npm run build
+```
+
 ---
 
 *[English version](README.en.md)*
