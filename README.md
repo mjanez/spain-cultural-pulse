@@ -2,7 +2,7 @@
 [![ES](https://img.shields.io/badge/lang-ES-yellow.svg)](README.md)
 [![EN](https://img.shields.io/badge/lang-EN-blue.svg)](README.en.md)
 
-Webapp interactiva para explorar cultura, valores y política en España contemporánea a través de visualizaciones de datos.
+Webapp interactiva para explorar cultura, valores y política en España contemporánea a través de visualizaciones que se nutren de datos abiertos.
 
 - **[Ver Demo](https://mjanez.github.io/spain-cultural-pulse)**
 
@@ -53,7 +53,3 @@ El proyecto se despliega automáticamente en GitHub Pages mediante GitHub Action
 ```bash
 npm run build
 ```
-
----
-
-*[English version](README.en.md)*

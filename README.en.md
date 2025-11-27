@@ -2,9 +2,9 @@
 [![ES](https://img.shields.io/badge/lang-ES-yellow.svg)](README.md)
 [![EN](https://img.shields.io/badge/lang-EN-blue.svg)](README.en.md)
 
-Interactive webapp to explore culture, values, and politics in contemporary Spain through data visualizations.
+Interactive webapp to explore culture, values, and politics in contemporary Spain through visualizations powered by open data.
 
-- **[View Demo](https://mjanez.github.io/spain-cultural-pulse)** ·
+- **[View Demo](https://mjanez.github.io/spain-cultural-pulse)**
 
 ## About
 
