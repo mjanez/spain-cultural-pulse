@@ -1,0 +1,202 @@
+{
+  "regions": {
+    "Andalucía": {
+      "politics": 5.2,
+      "rock": 5.8,
+      "pop": 6.2,
+      "reggaeton": 6.5,
+      "classica": 4.2,
+      "traditional": 7.1,
+      "satisfaction": 6.5,
+      "food": 7.8,
+      "mobility": 5.2
+    },
+    "Aragón": {
+      "politics": 5.0,
+      "rock": 5.5,
+      "pop": 5.2,
+      "reggaeton": 4.1,
+      "classica": 4.8,
+      "traditional": 6.2,
+      "satisfaction": 6.2,
+      "food": 7.1,
+      "mobility": 5.8
+    },
+    "Asturias": {
+      "politics": 4.2,
+      "rock": 6.2,
+      "pop": 5.1,
+      "reggaeton": 3.8,
+      "classica": 5.1,
+      "traditional": 6.8,
+      "satisfaction": 5.8,
+      "food": 6.9,
+      "mobility": 4.9
+    },
+    "Baleares": {
+      "politics": 5.1,
+      "rock": 5.9,
+      "pop": 6.8,
+      "reggaeton": 7.2,
+      "classica": 4.5,
+      "traditional": 5.2,
+      "satisfaction": 7.2,
+      "food": 7.5,
+      "mobility": 7.8
+    },
+    "Canarias": {
+      "politics": 4.8,
+      "rock": 5.6,
+      "pop": 6.1,
+      "reggaeton": 7.5,
+      "classica": 4.1,
+      "traditional": 5.9,
+      "satisfaction": 6.8,
+      "food": 7.2,
+      "mobility": 6.5
+    },
+    "Cantabria": {
+      "politics": 4.9,
+      "rock": 5.7,
+      "pop": 5.4,
+      "reggaeton": 3.9,
+      "classica": 4.9,
+      "traditional": 6.7,
+      "satisfaction": 6.1,
+      "food": 7.3,
+      "mobility": 5.4
+    },
+    "Castilla y León": {
+      "politics": 5.4,
+      "rock": 5.3,
+      "pop": 4.9,
+      "reggaeton": 3.5,
+      "classica": 5.2,
+      "traditional": 7.2,
+      "satisfaction": 5.9,
+      "food": 6.8,
+      "mobility": 4.8
+    },
+    "Castilla-La Mancha": {
+      "politics": 5.6,
+      "rock": 5.1,
+      "pop": 4.8,
+      "reggaeton": 3.8,
+      "classica": 4.6,
+      "traditional": 6.9,
+      "satisfaction": 5.7,
+      "food": 6.9,
+      "mobility": 4.5
+    },
+    "Cataluña": {
+      "politics": 4.1,
+      "rock": 6.1,
+      "pop": 5.9,
+      "reggaeton": 5.2,
+      "classica": 5.8,
+      "traditional": 5.8,
+      "satisfaction": 6.4,
+      "food": 8.1,
+      "mobility": 7.2
+    },
+    "Comunitat Valenciana": {
+      "politics": 5.0,
+      "rock": 5.9,
+      "pop": 6.0,
+      "reggaeton": 5.8,
+      "classica": 4.7,
+      "traditional": 6.5,
+      "satisfaction": 6.3,
+      "food": 7.7,
+      "mobility": 6.1
+    },
+    "Extremadura": {
+      "politics": 5.1,
+      "rock": 4.9,
+      "pop": 4.7,
+      "reggaeton": 4.2,
+      "classica": 4.3,
+      "traditional": 7.0,
+      "satisfaction": 5.5,
+      "food": 6.5,
+      "mobility": 4.2
+    },
+    "Galicia": {
+      "politics": 4.5,
+      "rock": 5.4,
+      "pop": 5.3,
+      "reggaeton": 4.0,
+      "classica": 5.0,
+      "traditional": 7.4,
+      "satisfaction": 6.0,
+      "food": 7.6,
+      "mobility": 5.3
+    },
+    "Madrid": {
+      "politics": 5.2,
+      "rock": 6.3,
+      "pop": 6.4,
+      "reggaeton": 6.1,
+      "classica": 5.6,
+      "traditional": 4.8,
+      "satisfaction": 6.2,
+      "food": 8.3,
+      "mobility": 8.1
+    },
+    "Murcia": {
+      "politics": 5.5,
+      "rock": 5.2,
+      "pop": 5.8,
+      "reggaeton": 6.2,
+      "classica": 4.1,
+      "traditional": 6.3,
+      "satisfaction": 6.4,
+      "food": 7.4,
+      "mobility": 5.6
+    },
+    "Navarra": {
+      "politics": 4.6,
+      "rock": 5.6,
+      "pop": 5.2,
+      "reggaeton": 3.7,
+      "classica": 5.1,
+      "traditional": 6.8,
+      "satisfaction": 6.7,
+      "food": 7.9,
+      "mobility": 6.2
+    },
+    "País Vasco": {
+      "politics": 3.8,
+      "rock": 6.5,
+      "pop": 5.4,
+      "reggaeton": 4.2,
+      "classica": 5.4,
+      "traditional": 6.5,
+      "satisfaction": 6.5,
+      "food": 8.5,
+      "mobility": 6.8
+    },
+    "La Rioja": {
+      "politics": 5.2,
+      "rock": 5.3,
+      "pop": 5.1,
+      "reggaeton": 3.9,
+      "classica": 4.7,
+      "traditional": 6.6,
+      "satisfaction": 6.3,
+      "food": 7.8,
+      "mobility": 5.5
+    }
+  },
+  "national": {
+    "politics": 4.9,
+    "rock": 5.8,
+    "pop": 5.7,
+    "reggaeton": 5.1,
+    "classica": 4.9,
+    "traditional": 6.4,
+    "satisfaction": 6.2,
+    "food": 7.5,
+    "mobility": 6.1
+  }
+}

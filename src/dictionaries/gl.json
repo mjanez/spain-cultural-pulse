@@ -1,0 +1,187 @@
+{
+  "language": {
+    "select": "Idioma",
+    "es": "Español",
+    "en": "English",
+    "eu": "Euskara",
+    "ca": "Català",
+    "gl": "Galego"
+  },
+  "home": {
+    "title": "Cultural pulse",
+    "title_highlight": "Spain",
+    "subtitle": "Encaixas de verdade onde vives? Descobre a túa \"tribo\" social e a túa rexión ideal baseada en datos reais.",
+    "music_tastes": "Música",
+    "social_values": "Sociedade",
+    "gastronomy": "Gastronomía",
+    "culture": "Cultura",
+    "identity": "Identidade",
+    "politics": "Política",
+    "mobility": "Mobilidade",
+    "religion": "Relixión",
+    "start_button": "Descubrir o meu perfil",
+    "footer": {
+        "text": "Baseado no dataset",
+        "linkText": "CSIC NORPOL 2024",
+        "linkUrl": "https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024"
+        }
+  },
+  "quiz": {
+    "next": "Seguinte",
+    "results": "Ver resultados",
+    "back_home": "Volver ao inicio",
+    "calculating": "Analizando o teu ADN cultural...",
+    "comparing": "Comparando con 3.000 enquisados do CSIC",
+    "categories": {
+      "culture": "Cultura",
+      "values": "Valores",
+      "lifestyle": "Estilo de vida",
+      "wellness": "Benestar"
+    },
+    "questions": {
+      "music_rock": "Do 0 ao 10, canto che gusta a música rock?",
+      "music_pop": "E a música pop española?",
+      "music_reggaeton": "Que tal o Reggaeton / Música urbana?",
+      "music_classical": "Canto che gusta a música clásica?",
+      "music_traditional": "Canto che gusta a música tradicional/folclórica?",
+      "politics_leftright": "En política, onde te sitúas?",
+      "politics_environment": "Que importancia ten para ti a protección do medio ambiente?",
+      "politics_equality": "Apoias medidas para reducir a desigualdade económica?",
+      "values_authority": "A sociedade necesita normas estritas e autoridade forte?",
+      "social_lgbt": "Apoias os dereitos LGTB?",
+      "social_immigration": "Que opinas sobre a inmigración?",
+      "social_abortion": "Apoias o dereito ao aborto?",
+      "culture_reading": "Con que frecuencia les libros?",
+      "culture_sports": "Que importancia ten o deporte na túa vida?",
+      "food_adventurous": "Gústache probar comida doutros países?",
+      "food_social": "Gústache comer fóra de casa (bares, restaurantes)?",
+      "mobility_public": "Usas transporte público habitualmente?",
+      "mobility_car": "Usas o coche a diario?",
+      "identity_spanish": "Ata que punto te sentes español/a?",
+      "identity_regional": "Identifícaste máis coa túa rexión que con España?",
+      "religiosity": "Que importancia ten a relixión na túa vida?"
+    },
+    "labels": {
+      "nothing": "Nada",
+      "much": "Moito",
+      "left": "Esquerda",
+      "right": "Dereita",
+      "selective": "Son moi selectivo",
+      "everything": "Como de todo",
+      "never": "Nunca",
+      "constantly": "Constantemente",
+      "not_important": "Nada importante",
+      "very_important": "Moi importante",
+      "totally": "Totalmente",
+      "restrictive": "Restrictiva",
+      "open": "Aberta",
+      "no": "Non",
+      "yes_totally": "Si, totalmente",
+      "almost_never": "Case nunca",
+      "very_often": "Moi a miúdo",
+      "always": "Sempre",
+      "not_at_all": "Nada",
+      "very_spanish": "Moi español/a",
+      "spain_first": "España primeiro",
+      "region_first": "A miña rexión primeiro",
+      "no_importance": "Ningunha",
+      "individual_freedom": "Liberdade individual",
+      "strong_authority": "Autoridade forte"
+    }
+  },
+  "results": {
+    "restart": "Reiniciar",
+    "share": "Compartir",
+    "download_image": "Descargar imaxe",
+    "copy_link": "Copiar ligazón",
+    "link_copied": "Ligazón copiada ao portapapeis!",
+    "image_downloaded": "Imaxe descargada!",
+    "share_failed": "Non se puido compartir. Proba a copiar a ligazón.",
+    "your_tribe": "A túa tribo cultural é",
+    "political_position": "A túa posición política",
+    "political_quadrants": {
+      "auth_left": "Esq. Autoritaria",
+      "auth_right": "Der. Autoritaria",
+      "lib_left": "Esq. Libertaria",
+      "lib_right": "Der. Libertaria",
+      "authoritarian": "Autoritario",
+      "libertarian": "Libertario",
+      "left": "Esquerda",
+      "right": "Dereita",
+      "you": "Ti",
+      "spain": "España",
+      "left_right_axis": "Esquerda-Dereita",
+      "auth_lib_axis": "Autoritario-Libertario"
+    },
+    "tribe_desc": "Os teus patróns de consumo cultural e valores sociais distínguente da media nacional, inclinándote cara a un perfil único.",
+    "cultural_home": "O teu \"Fogar\" Cultural",
+    "affinity": "A túa maior afinidade é con:",
+    "top_3": "Top 3 Afinidades Rexionais",
+    "you_vs_spain": "Ti vs. España",
+    "comparison_desc": "Comparativa dos teus gustos coa media do estudo NORPOL 2024.",
+    "info": "Esta análise utiliza datos do <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudo sobre Normas Sociais na Política 2024</strong></a>. Os perfís rexionais calculáronse agregando as respostas dos 3.015 participantes orixinais e buscando a menor distancia vectorial coas túas preferencias.",
+    "radar": {
+      "rock": "Rock",
+      "pop": "Pop",
+      "urban": "Urbano",
+      "classical": "Clásica",
+      "tradition": "Tradición",
+      "right": "Dereita",
+      "gastronomy": "Gastronomía",
+      "mobility": "Mobilidade",
+      "you": "Ti",
+      "national_avg": "Media Nacional",
+      "music": "Música",
+      "politics": "Política",
+      "social_values": "Valores Sociais",
+      "identity": "Identidade",
+      "culture": "Cultura"
+    },
+    "tribes": {
+      "average": "Cidadán medio",
+      "rebel": "Rebelde alternativo",
+      "guardian": "Gardián da tradición",
+      "party": "Alma da festa",
+      "optimist": "Optimista radical",
+      "explorer": "Explorador hedonista"
+    }
+  },
+  "tribes": {
+    "conservative_traditional": {
+      "name": "Conservador tradicional",
+      "description": "Valores tradicionais, familia, relixioso, conservador"
+    },
+    "progressive_urban": {
+      "name": "Progresista urbano",
+      "description": "Cosmopolita, progresista, cultural, mobilidade sostible"
+    },
+    "young_partygoer": {
+      "name": "Novo festeiro",
+      "description": "Música urbana, festa, lecer nocturno, redes sociais"
+    },
+    "middle_class_moderate": {
+      "name": "Clase media moderada",
+      "description": "Centrista, pragmático, familia e traballo"
+    },
+    "ecologist_alternative": {
+      "name": "Ecoloxista alternativo",
+      "description": "Medio ambiente, consumo responsable, indie, sostibilidade"
+    },
+    "working_class_rooted": {
+      "name": "Popular arraigado",
+      "description": "Clase traballadora, orgullo local, fútbol, tradicións populares"
+    }
+  },
+  "match": {
+    "title": "Atopa a túa rexión ideal",
+    "age_label": "Idade",
+    "age_placeholder": "30",
+    "politics_label": "Orientación política",
+    "politics_left": "Esquerda",
+    "politics_center": "Centro",
+    "politics_right": "Dereita",
+    "submit_button": "Buscar coincidencia",
+    "results_title": "As túas coincidencias rexionais",
+    "retry_button": "Volver a intentar"
+  }
+}
