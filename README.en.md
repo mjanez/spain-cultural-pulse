@@ -4,6 +4,8 @@
 
 Interactive webapp to explore culture, values, and politics in contemporary Spain through data visualizations.
 
+- **[View Demo](https://mjanez.github.io/spain-cultural-pulse)** ·
+
 ## About
 
 Web application built with Next.js that enables analysis and visualization of cultural and social patterns in Spain. Data comes from a representative survey of 3,000 Spanish adults conducted in 2024.
@@ -13,15 +15,15 @@ Web application built with Next.js that enables analysis and visualization of cu
 - **Framework:** Next.js 14 (App Router)
 - **Visualization:** Recharts / D3.js
 - **Styling:** Tailwind CSS
-- **Deployment:** Vercel
+- **Deployment:** [GitHub Pages](#deployment)/Vercel
 
 ## Data Source
 
 Based on the [Study on Social Norms in Politics, 2024](https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024) by CSIC.
 
-**Sample:** 3,000 Spanish adults (online survey, June 2024)  
-**Panel:** Netquest  
-**Representative by:** gender, age, education, region, and municipality size
+>**Sample:** 3,000 Spanish adults (online survey, June 2024)  
+>**Panel:** Netquest  
+>**Representative by:** gender, age, education, region, and municipality size
 
 ## What it covers
 
@@ -52,6 +54,3 @@ The project automatically deploys to GitHub Pages via GitHub Actions when pushin
 npm run build
 ```
 
----
-
-*[Versión en español](README.md)*

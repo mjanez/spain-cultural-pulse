@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { calculateTribe } from '@/app/actions';
 
 export default function QuizClient({ dict, lang }: { dict: any, lang: string }) {
   const [result, setResult] = useState<any>(null);
 
   async function handleSubmit(formData: FormData) {
-    const tribe = await calculateTribe(formData, lang);
-    setResult(tribe);
+    // Placeholder - redirect to main app
+    window.location.href = `/${lang}/`;
   }
 
   if (!dict) return <div>Loading...</div>;

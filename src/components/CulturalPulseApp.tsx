@@ -24,7 +24,8 @@ import {
   Flag,
   Languages,
   Download,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Github
 } from 'lucide-react';
 import { 
   Radar, 
@@ -544,6 +545,16 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
   const handleAnswer = (value: number) => {
     const currentQ = QUIZ_QUESTIONS[currentQuestionIndex];
     setAnswers(prev => ({ ...prev, [currentQ.id]: value }));
+    
+    // Auto-advance to next question after a short delay
+    setTimeout(() => {
+      if (currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+      } else {
+        setView('calculating');
+        setTimeout(() => setView('results'), 1500);
+      }
+    }, 400); // 400ms delay for smooth UX
   };
 
   const nextQuestion = () => {
@@ -787,7 +798,19 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 {dict.home.footer.linkText}
                 <ChevronRight className="w-3 h-3" />
             </a>
-        </p>
+          </p>
+          
+          {/* GitHub Link */}
+          <a 
+            href={process.env.GITHUB_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 flex items-center justify-center gap-2 text-white/50 hover:text-white/80 transition-colors text-sm"
+            aria-label={dict.home.github_link}
+          >
+            <Github className="w-5 h-5" />
+            <span>{dict.home.github_link}</span>
+          </a>
         </div>
       </div>
     );
@@ -859,14 +882,10 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               </div>
             </div>
 
-            <div className="mt-8 flex justify-end">
-              <button 
-                onClick={nextQuestion}
-                disabled={answers[q.id] === undefined}
-                className="bg-white text-slate-900 px-8 py-3 rounded-xl font-bold hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {currentQuestionIndex === QUIZ_QUESTIONS.length - 1 ? dict.quiz.results : dict.quiz.next}
-              </button>
+            <div className="mt-8 text-center">
+              <p className="text-xs text-gray-400">
+                {dict.quiz.question_progress || `Pregunta ${currentQuestionIndex + 1} de ${QUIZ_QUESTIONS.length}`}
+              </p>
             </div>
           </div>
         </div>
@@ -948,6 +967,18 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
             }} className="text-gray-400 hover:text-white flex items-center gap-2">
               <RefreshCw size={18} /> {dict.results.restart}
             </button>
+            
+            {/* GitHub Link - centered */}
+            <a 
+              href={process.env.GITHUB_REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+              aria-label={dict.home.github_link}
+            >
+              <Github className="w-4 h-4" />
+              <span>{dict.home.github_link}</span>
+            </a>
             
             {/* Share Menu */}
             <div className="relative" ref={shareDropdownRef}>

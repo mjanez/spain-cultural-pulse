@@ -24,7 +24,8 @@
         "text": "Baseado no dataset",
         "linkText": "CSIC NORPOL 2024",
         "linkUrl": "https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024"
-        }
+        },
+    "github_link": "Ver código fonte en GitHub"
   },
   "quiz": {
     "next": "Seguinte",

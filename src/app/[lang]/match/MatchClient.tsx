@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { calculateMatch } from '@/app/actions';
 
 export default function MatchClient({ dict, lang }: { dict: any, lang: string }) {
   const [results, setResults] = useState<any[] | null>(null);
 
   async function handleSubmit(formData: FormData) {
-    const matches = await calculateMatch(formData, lang);
-    setResults(matches);
+    // Placeholder - redirect to main app
+    window.location.href = `/${lang}/`;
   }
 
   if (!dict) return <div>Loading...</div>;

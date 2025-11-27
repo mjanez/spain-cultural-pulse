@@ -4,6 +4,8 @@
 
 Webapp interactiva para explorar cultura, valores y política en España contemporánea a través de visualizaciones de datos.
 
+- **[Ver Demo](https://mjanez.github.io/spain-cultural-pulse)**
+
 ## Sobre el proyecto
 
 Aplicación web desarrollada con Next.js que permite analizar y visualizar patrones culturales y sociales en España. Los datos provienen de una encuesta representativa de 3.000 adultos españoles realizada en 2024.
@@ -13,15 +15,15 @@ Aplicación web desarrollada con Next.js que permite analizar y visualizar patro
 - **Framework:** Next.js 14 (App Router)
 - **Visualización:** Recharts / D3.js
 - **Estilos:** Tailwind CSS
-- **Despliegue:** Vercel
+- **Deployment:** [GitHub Pages](#despliegue)/Vercel
 
 ## Fuente de datos
 
 Basado en el [Estudio sobre Normas Sociales en la Política, 2024](https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024) del CSIC.
 
-**Muestra:** 3.000 adultos españoles (encuesta online, junio 2024)  
-**Panel:** Netquest  
-**Representatividad:** género, edad, educación, región y tamaño de municipio
+> **Muestra:** 3.000 adultos españoles (encuesta online, junio 2024)  
+> **Panel:** Netquest  
+> **Representatividad:** género, edad, educación, región y tamaño de municipio
 
 ## Qué analiza
 
