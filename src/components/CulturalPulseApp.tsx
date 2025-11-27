@@ -238,7 +238,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
 
   // Language Selector Component
   const LanguageSelector = () => (
-    <div className="absolute top-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-6 z-50" ref={dropdownRef}>
+    <div className="absolute top-6 right-6 z-50" ref={dropdownRef}>
       <button
         onClick={() => setLangDropdownOpen(!langDropdownOpen)}
         className="flex items-center gap-2 md:gap-3 bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md rounded-xl px-3 py-2 md:px-4 md:py-2.5 border border-slate-600/50 shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:scale-105 cursor-pointer"
@@ -272,7 +272,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
       </button>
       
       {langDropdownOpen && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-0 mt-2 w-40 md:w-44 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md">
+        <div className="absolute top-full right-0 mt-2 w-40 md:w-44 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md">
           <button
             onClick={() => {
               switchLanguage('es');
