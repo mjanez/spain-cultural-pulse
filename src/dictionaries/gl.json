@@ -25,7 +25,9 @@
         "linkText": "CSIC NORPOL 2024",
         "linkUrl": "https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024"
         },
-    "github_link": "Ver código fonte en GitHub"
+    "github_link": "Ver código fonte en GitHub",
+    "cc_license_title": "Licenza CC BY 4.0",
+    "cc_license_alt": "Licenciado baixo CC BY 4.0"
   },
   "quiz": {
     "next": "Seguinte",
@@ -121,6 +123,12 @@
     "you_vs_spain": "Ti vs. España",
     "comparison_desc": "Comparativa dos teus gustos coa media do estudo NORPOL 2024.",
     "info": "Esta análise utiliza datos do <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudo sobre Normas Sociais na Política 2024</strong></a>. Os perfís rexionais calculáronse agregando as respostas dos 3.015 participantes orixinais e buscando a menor distancia vectorial coas túas preferencias.",
+    "attribution": {
+      "title": "Atribucións",
+      "data_source": "Fonte de datos: <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\">CSIC NORPOL 2024</a>",
+      "libraries": "Desenvolvido con <a href=\"https://nextjs.org\" target=\"_blank\" rel=\"noopener noreferrer\">Next.js</a>, <a href=\"https://leafletjs.com\" target=\"_blank\" rel=\"noopener noreferrer\">Leaflet</a> e <a href=\"https://recharts.org\" target=\"_blank\" rel=\"noopener noreferrer\">Recharts</a>",
+      "license": "Licenza: <a href=\"https://creativecommons.org/licenses/by/4.0/\" target=\"_blank\" rel=\"noopener noreferrer\">CC BY 4.0</a>"
+    },
     "radar": {
       "rock": "Rock",
       "pop": "Pop",

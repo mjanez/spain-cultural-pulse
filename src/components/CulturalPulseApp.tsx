@@ -735,6 +735,22 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
       <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white flex flex-col items-center justify-center p-6 font-sans">
         <LanguageSelector />
         
+        {/* GitHub Link - Top Left */}
+        <a 
+          href={process.env.GITHUB_REPO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute top-6 left-6 z-50 group bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md rounded-xl px-3 py-2 md:px-4 md:py-2.5 border border-slate-600/50 shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:scale-105"
+          aria-label={dict.home.github_link}
+        >
+          <div className="flex items-center gap-2 md:gap-3">
+            <Github className="w-3 h-3 md:w-4 md:h-4 text-pink-400 flex-shrink-0" />
+            <span className="text-xs md:text-sm font-semibold text-white whitespace-nowrap max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out">
+              {dict.home.github_link}
+            </span>
+          </div>
+        </a>
+        
         <div className="max-w-md w-full text-center space-y-6">
           <div className="animate-bounce bg-white/10 p-4 rounded-full inline-block backdrop-blur-sm">
             <Activity className="w-16 h-16 text-pink-400" />
@@ -799,18 +815,23 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 <ChevronRight className="w-3 h-3" />
             </a>
           </p>
-          
-          {/* GitHub Link */}
-          <a 
-            href={process.env.GITHUB_REPO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 flex items-center justify-center gap-2 text-white/50 hover:text-white/80 transition-colors text-sm"
-            aria-label={dict.home.github_link}
-          >
-            <Github className="w-5 h-5" />
-            <span>{dict.home.github_link}</span>
-          </a>
+
+          {/* Attribution Section */}
+          <div className="flex justify-center mt-4">
+            <a 
+              href="https://creativecommons.org/licenses/by/4.0/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="opacity-60 hover:opacity-100 transition-opacity"
+              title={dict.home.cc_license_title}
+            >
+              <img 
+                src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg" 
+                alt={dict.home.cc_license_alt}
+                className="h-8"
+              />
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -1042,24 +1063,56 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               </div>
 
               <div className="space-y-3">
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{dict.results.top_3}</p>
-                {results.matchScores.slice(0, 3).map((match, i) => {
-                  // Fórmula exponencial para mayor diferenciación visual: 95% para diff=0, 30% para maxDistance
-                  const normalizedDiff = match.diff / results.dynamicMaxDistance; // 0 a 1
-                  const matchPercentage = Math.max(30, Math.min(100, 95 - (normalizedDiff * normalizedDiff * 65)));
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{dict.results.top_5 || 'Top 5 regiones más afines'}</p>
+                {results.matchScores.slice(0, 5).map((match, i) => {
+                  // Escala de afinidad: 1 (mejor) a 19 (peor)
+                  const affinityScore = i + 1;
+                  
+                  // Colores graduales en tonos de verde (verde oscuro → verde claro)
+                  const getAffinityColor = (score: number) => {
+                    if (score === 1) return 'from-green-700 to-green-600';
+                    if (score === 2) return 'from-green-600 to-green-500';
+                    if (score === 3) return 'from-green-500 to-green-400';
+                    if (score === 4) return 'from-green-400 to-green-300';
+                    return 'from-green-300 to-green-200';
+                  };
+                  
+                  const getTextColor = (score: number) => {
+                    if (score === 1) return 'text-green-400';
+                    if (score === 2) return 'text-green-300';
+                    if (score === 3) return 'text-lime-400';
+                    if (score === 4) return 'text-lime-300';
+                    return 'text-lime-200';
+                  };
+                  
+                  const getBgColor = (score: number) => {
+                    if (score === 1) return 'bg-green-700/20 border-green-600/40';
+                    if (score === 2) return 'bg-green-600/20 border-green-500/40';
+                    if (score === 3) return 'bg-green-500/20 border-green-400/40';
+                    if (score === 4) return 'bg-green-400/20 border-green-300/40';
+                    return 'bg-green-300/20 border-green-200/40';
+                  };
+                  
                   return (
-                    <div key={match.region} className="flex items-center justify-between bg-slate-800 p-3 rounded-lg">
-                      <span className="flex items-center gap-2">
-                        <span className="bg-slate-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">{i+1}</span>
-                        <span>{match.region}</span>
+                    <div 
+                      key={match.region} 
+                      className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
+                        i === 0 
+                          ? `${getBgColor(affinityScore)} ring-2 ring-emerald-400/30` 
+                          : 'bg-slate-800 border-slate-700'
+                      }`}
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-gradient-to-br ${getAffinityColor(affinityScore)} text-white shadow-lg`}>
+                          {affinityScore}
+                        </span>
+                        <span className={`font-medium ${i === 0 ? 'text-white' : ''}`}>{match.region}</span>
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400 font-mono">{matchPercentage.toFixed(0)}%</span>
-                        <div className="h-2 w-16 bg-slate-700 rounded-full overflow-hidden">
-                          {/* eslint-disable-next-line */}
+                        <div className="h-2 w-20 bg-slate-700 rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-pink-500 w-[var(--width)]" 
-                            style={{ '--width': `${((matchPercentage - 30) / 65) * 100}%` } as React.CSSProperties}
+                            className={`h-full bg-gradient-to-r ${getAffinityColor(affinityScore)}`}
+                            style={{ width: `${100 - (affinityScore - 1) * 5}%` }}
                           ></div>
                         </div>
                       </div>
@@ -1117,19 +1170,16 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 </div>
                 
                 <div className="relative w-full aspect-square max-w-sm mx-auto bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-4">
-                  {/* Ejes */}
-                  <div className="absolute inset-4 border-l-2 border-b-2 border-slate-600"></div>
-                  
                   {/* Etiquetas de cuadrantes */}
                   <div className="absolute top-2 left-2 text-xs text-red-400 font-bold">{dict.results.political_quadrants.auth_left}</div>
                   <div className="absolute top-2 right-2 text-xs text-blue-400 font-bold text-right">{dict.results.political_quadrants.auth_right}</div>
                   <div className="absolute bottom-2 left-2 text-xs text-green-400 font-bold">{dict.results.political_quadrants.lib_left}</div>
                   <div className="absolute bottom-2 right-2 text-xs text-purple-400 font-bold text-right">{dict.results.political_quadrants.lib_right}</div>
                   
-                  {/* Líneas de cuadrícula */}
-                  <div className="absolute inset-4">
-                    <div className="absolute left-1/2 top-0 bottom-0 border-l border-slate-700"></div>
-                    <div className="absolute top-1/2 left-0 right-0 border-t border-slate-700"></div>
+                  {/* Cruz central (ejes X e Y) */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="absolute w-full border-t-2 border-slate-600"></div>
+                    <div className="absolute h-full border-l-2 border-slate-600"></div>
                   </div>
                   
                   {/* Etiquetas de ejes */}
@@ -1177,6 +1227,23 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
             <div className="bg-slate-800/50 rounded-2xl p-4 flex gap-4 items-start text-sm text-gray-400">
               <Info className="shrink-0 mt-1" />
               <p dangerouslySetInnerHTML={{ __html: dict.results.info }}></p>
+            </div>
+
+            {/* Attribution Section */}
+            <div className="flex justify-center mt-4">
+              <a 
+                href="https://creativecommons.org/licenses/by/4.0/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="opacity-60 hover:opacity-100 transition-opacity"
+                title={dict.home.cc_license_title}
+              >
+                <img 
+                  src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg" 
+                  alt={dict.home.cc_license_alt}
+                  className="h-8"
+                />
+              </a>
             </div>
           </div>
           {/* Fin contenedor captura imagen */}

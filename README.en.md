@@ -2,7 +2,9 @@
 [![ES](https://img.shields.io/badge/lang-ES-yellow.svg)](README.md)
 [![EN](https://img.shields.io/badge/lang-EN-blue.svg)](README.en.md)
 
-Interactive webapp to explore culture, values, and politics in contemporary Spain through data visualizations.
+Interactive webapp to explore culture, values, and politics in contemporary Spain through visualizations powered by open data.
+
+- **[View Demo](https://mjanez.github.io/spain-cultural-pulse)**
 
 - **[View Demo](https://mjanez.github.io/spain-cultural-pulse)** ·
 
@@ -24,6 +26,10 @@ Based on the [Study on Social Norms in Politics, 2024](https://datos.gob.es/es/c
 >**Sample:** 3,000 Spanish adults (online survey, June 2024)  
 >**Panel:** Netquest  
 >**Representative by:** gender, age, education, region, and municipality size
+
+## License
+
+This project is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). You are free to use, share, and adapt this work as long as you provide appropriate attribution.
 
 ## What it covers
 
