@@ -24,7 +24,8 @@ import {
   Flag,
   Languages,
   Download,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Github
 } from 'lucide-react';
 import { 
   Radar, 
@@ -787,7 +788,19 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 {dict.home.footer.linkText}
                 <ChevronRight className="w-3 h-3" />
             </a>
-        </p>
+          </p>
+          
+          {/* GitHub Link */}
+          <a 
+            href={process.env.GITHUB_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 flex items-center justify-center gap-2 text-white/50 hover:text-white/80 transition-colors text-sm"
+            aria-label={dict.home.github_link}
+          >
+            <Github className="w-5 h-5" />
+            <span>{dict.home.github_link}</span>
+          </a>
         </div>
       </div>
     );
@@ -948,6 +961,18 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
             }} className="text-gray-400 hover:text-white flex items-center gap-2">
               <RefreshCw size={18} /> {dict.results.restart}
             </button>
+            
+            {/* GitHub Link - centered */}
+            <a 
+              href={process.env.GITHUB_REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+              aria-label={dict.home.github_link}
+            >
+              <Github className="w-4 h-4" />
+              <span>{dict.home.github_link}</span>
+            </a>
             
             {/* Share Menu */}
             <div className="relative" ref={shareDropdownRef}>
