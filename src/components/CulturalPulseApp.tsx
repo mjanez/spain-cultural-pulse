@@ -740,11 +740,15 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           href={process.env.GITHUB_REPO_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute top-6 left-6 z-50 bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md rounded-xl p-3 md:p-3.5 border border-slate-600/50 shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:scale-105"
+          className="absolute top-6 left-6 z-50 group bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md rounded-xl px-3 py-2 md:px-4 md:py-2.5 border border-slate-600/50 shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:scale-105"
           aria-label={dict.home.github_link}
-          title={dict.home.github_link}
         >
-          <Github className="w-5 h-5 md:w-6 md:h-6 text-pink-400" />
+          <div className="flex items-center gap-2 md:gap-3">
+            <Github className="w-3 h-3 md:w-4 md:h-4 text-pink-400 flex-shrink-0" />
+            <span className="text-xs md:text-sm font-semibold text-white whitespace-nowrap max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out">
+              {dict.home.github_link}
+            </span>
+          </div>
         </a>
         
         <div className="max-w-md w-full text-center space-y-6">
