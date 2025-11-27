@@ -1,0 +1,187 @@
+{
+  "language": {
+    "select": "Hizkuntza",
+    "es": "Español",
+    "en": "English",
+    "eu": "Euskara",
+    "ca": "Català",
+    "gl": "Galego"
+  },
+  "home": {
+    "title": "Cultural pulse",
+    "title_highlight": "Spain",
+    "subtitle": "Benetan egokitzen zara bizi zaren lekuan? Aurkitu zure tribu soziala eta zure eskualde ideala datu errealetan oinarrituta.",
+    "music_tastes": "Musika",
+    "social_values": "Gizartea",
+    "gastronomy": "Gastronomia",
+    "culture": "Kultura",
+    "identity": "Identitatea",
+    "politics": "Politika",
+    "mobility": "Mugikortasuna",
+    "religion": "Erlijioa",
+    "start_button": "Aurkitu nire profila",
+    "footer": {
+        "text": "Oinarrituta datuetan",
+        "linkText": "CSIC NORPOL 2024",
+        "linkUrl": "https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024"
+        }
+  },
+  "quiz": {
+    "next": "Hurrengoa",
+    "results": "Ikusi emaitzak",
+    "back_home": "Hasierara itzuli",
+    "calculating": "Zure DNA kulturala aztertzen...",
+    "comparing": "CSICeko 3.000 inkestarekin alderatzen",
+    "categories": {
+      "culture": "Kultura",
+      "values": "Balioak",
+      "lifestyle": "Bizimodu",
+      "wellness": "Ongizatea"
+    },
+    "questions": {
+      "music_rock": "0tik 10era, zenbat gustatzen zaizu rock musika?",
+      "music_pop": "Eta espainar pop musika?",
+      "music_reggaeton": "Zer esango zenuke Reggaeton / musika urbanoari buruz?",
+      "music_classical": "Zenbat gustatzen zaizu musika klasikoa?",
+      "music_traditional": "Zenbat gustatzen zaizu musika tradizionala/folklorea?",
+      "politics_leftright": "Politikan, non kokatzen zara?",
+      "politics_environment": "Zenbateko garrantzia du zuretzat ingurumenaren babesa?",
+      "politics_equality": "Sostengatu al dituzu desparekotasun ekonomikoa murrizteko neurriak?",
+      "values_authority": "Gizarteak arau zorrotzak eta agintaritza indartsua behar al ditu?",
+      "social_lgbt": "Euskarri al dituzu LGTB eskubideak?",
+      "social_immigration": "Zer iritzi duzu immigrazioari buruz?",
+      "social_abortion": "Abortuaren eskubidea euskarri al duzu?",
+      "culture_reading": "Zein maiztasunekin irakurtzen dituzu liburuak?",
+      "culture_sports": "Zenbateko garrantzia du kirolak zure bizitzan?",
+      "food_adventurous": "Beste herrialdeetako janaria probatzen gustatzen al zaizu?",
+      "food_social": "Kanpoan jatea gustatzen al zaizu (tabernetan, jatetxeetan)?",
+      "mobility_public": "Garraio publikoa ohiz erabiltzen al duzu?",
+      "mobility_car": "Egunero erabiltzen al duzu autoa?",
+      "identity_spanish": "Zenbateraino espainiar sentitzen zara?",
+      "identity_regional": "Gehiago identifikatzen al zara zure eskualdearekin Espainiarekin baino?",
+      "religiosity": "Zein garrantzi du erlijioak zure bizitzan?"
+    },
+    "labels": {
+      "nothing": "Ezer ez",
+      "much": "Asko",
+      "left": "Ezkerra",
+      "right": "Eskuina",
+      "selective": "Oso hautakorra naiz",
+      "everything": "Guztia jaten dut",
+      "never": "Inoiz ez",
+      "constantly": "Etengabe",
+      "not_important": "Ez da garrantzitsua",
+      "very_important": "Oso garrantzitsua",
+      "totally": "Erabat",
+      "restrictive": "Murriztailea",
+      "open": "Irekia",
+      "no": "Ez",
+      "yes_totally": "Bai, erabat",
+      "almost_never": "Ia inoiz ez",
+      "very_often": "Oso sarri",
+      "always": "Beti",
+      "not_at_all": "Batere ez",
+      "very_spanish": "Oso espainiar",
+      "spain_first": "Espainia lehenik",
+      "region_first": "Nire eskualdea lehenik",
+      "no_importance": "Garrantzirik ez",
+      "individual_freedom": "Askatasun indibiduala",
+      "strong_authority": "Agintaritza indartsua"
+    }
+  },
+  "results": {
+    "restart": "Berrabiarazi",
+    "share": "Partekatu",
+    "download_image": "Deskargatu irudia",
+    "copy_link": "Kopiatu esteka",
+    "link_copied": "Esteka arbelean kopiatu da!",
+    "image_downloaded": "Irudia deskargatu da!",
+    "share_failed": "Ezin izan da partekatu. Saiatu esteka kopiatzen.",
+    "your_tribe": "Zure tribu kulturala da",
+    "political_position": "Zure posizio politikoa",
+    "political_quadrants": {
+      "auth_left": "Ezk. Autoritarioa",
+      "auth_right": "Esk. Autoritarioa",
+      "lib_left": "Ezk. Libertarioa",
+      "lib_right": "Esk. Libertarioa",
+      "authoritarian": "Autoritarioa",
+      "libertarian": "Libertarioa",
+      "left": "Ezkerra",
+      "right": "Eskuina",
+      "you": "Zu",
+      "spain": "Espainia",
+      "left_right_axis": "Ezkerra-Eskuina",
+      "auth_lib_axis": "Autoritarioa-Libertarioa"
+    },
+    "tribe_desc": "Zure kontsumo kultural ereduak eta balio sozialak nabarmentzen zaituzte batez bestekotik, profil paregabe batera makurtuz.",
+    "cultural_home": "Zure \"Etxe\" Kulturala",
+    "affinity": "Zure afinitate handiena honekin da:",
+    "top_3": "Top 3 eskualdeko afinitateak",
+    "you_vs_spain": "Zu vs. Espainia",
+    "comparison_desc": "Zure gust oen konparaketa NORPOL 2024 azterlanaren batez bestekoarekin.",
+    "info": "Analisi honek <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Politikaren Arau Sozialen Gaineko Ikerketaren 2024ko datuak</strong></a> erabiltzen ditu. Eskualde profilak jatorrizko 3.015 partaideen erantzunak batu eta zure lehentasunekin distantzia bektorial txikiena bilatuz kalkulatu dira.",
+    "radar": {
+      "rock": "Rock",
+      "pop": "Pop",
+      "urban": "Urbano",
+      "classical": "Klasikoa",
+      "tradition": "Tradizioa",
+      "right": "Eskuina",
+      "gastronomy": "Gastronomia",
+      "mobility": "Mugikortasuna",
+      "you": "Zu",
+      "national_avg": "Batez bestekoa",
+      "music": "Musika",
+      "politics": "Politika",
+      "social_values": "Balio sozialak",
+      "identity": "Identitatea",
+      "culture": "Kultura"
+    },
+    "tribes": {
+      "average": "Hiritar batez bestekoa",
+      "rebel": "Errebelatu alternatiboa",
+      "guardian": "Tradizioaren zaindaria",
+      "party": "Festaren arima",
+      "optimist": "Baikoi erradikala",
+      "explorer": "Esploratzaile hedonista"
+    }
+  },
+  "tribes": {
+    "conservative_traditional": {
+      "name": "Kontserbatzaile tradizionala",
+      "description": "Balio tradizionalak, familia, erlijiosoa, kontserbadorea"
+    },
+    "progressive_urban": {
+      "name": "Progresista hiritarra",
+      "description": "Kosmopolita, progresista, kulturala, mugikortasun jasangarria"
+    },
+    "young_partygoer": {
+      "name": "Gazte jaizkoia",
+      "description": "Musika urbanoa, festa, gau aisialdia, sare sozialak"
+    },
+    "middle_class_moderate": {
+      "name": "Klase ertain moderatua",
+      "description": "Zentristara, pragmatikoa, familia eta lana"
+    },
+    "ecologist_alternative": {
+      "name": "Ekologista alternatiboa",
+      "description": "Ingurumena, kontsumo arduratsu, indie, iraunkortasuna"
+    },
+    "working_class_rooted": {
+      "name": "Langile klase errotua",
+      "description": "Langile klasea, harro lokala, futbola, tradizio herrikoiak"
+    }
+  },
+  "match": {
+    "title": "Aurkitu zure eskualde ideala",
+    "age_label": "Adina",
+    "age_placeholder": "30",
+    "politics_label": "Orientazio politikoa",
+    "politics_left": "Ezkerra",
+    "politics_center": "Erdia",
+    "politics_right": "Eskuina",
+    "submit_button": "Bilatu bat etortze",
+    "results_title": "Zure eskualde bat etortzeak",
+    "retry_button": "Berriro saiatu"
+  }
+}
