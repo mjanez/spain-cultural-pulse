@@ -25,6 +25,10 @@ Basado en el [Estudio sobre Normas Sociales en la Política, 2024](https://datos
 > **Panel:** Netquest  
 > **Representatividad:** género, edad, educación, región y tamaño de municipio
 
+## Licencia
+
+Este proyecto está licenciado bajo [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). Puedes usar, compartir y adaptar este trabajo siempre que des la atribución apropiada.
+
 ## Qué analiza
 
 - **Cultura y ocio:** preferencias musicales, deportivas, alimentación y moda
