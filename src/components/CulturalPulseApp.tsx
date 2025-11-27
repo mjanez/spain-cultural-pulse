@@ -161,9 +161,16 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
   
   const switchLanguage = (newLang: string) => {
     const currentPath = window.location.pathname;
-    // Eliminar todos los segmentos de idioma y reconstruir con el nuevo
-    const pathWithoutLang = currentPath.replace(/^\/(es|en|eu|ca|val|gl)(\/.*)?$/, '$2') || '/';
-    const newPath = `/${newLang}${pathWithoutLang === '/' ? '' : pathWithoutLang}`;
+    const basePath = process.env.PAGES_BASE_PATH || '';
+    
+    // Remover basePath si existe para procesar solo la ruta relativa
+    const relativePath = basePath ? currentPath.replace(basePath, '') : currentPath;
+    
+    // Eliminar el segmento de idioma actual
+    const pathWithoutLang = relativePath.replace(/^\/(es|en|eu|ca|val|gl)(\/.*)?$/, '$2') || '/';
+    
+    // Reconstruir la ruta completa con basePath + nuevo idioma + ruta sin idioma
+    const newPath = `${basePath}/${newLang}${pathWithoutLang === '/' ? '' : pathWithoutLang}`;
     window.location.href = newPath + window.location.search;
   };
 

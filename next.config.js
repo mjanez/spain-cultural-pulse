@@ -8,6 +8,7 @@ const nextConfig = {
   trailingSlash: true,
   env: {
     GITHUB_REPO_URL: 'https://github.com/mjanez/spain-cultural-pulse',
+    PAGES_BASE_PATH: process.env.PAGES_BASE_PATH || '',
   },
 }
 
