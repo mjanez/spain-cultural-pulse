@@ -24,6 +24,10 @@ Based on the [Study on Social Norms in Politics, 2024](https://datos.gob.es/es/c
 >**Panel:** Netquest  
 >**Representative by:** gender, age, education, region, and municipality size
 
+## License
+
+This project is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). You are free to use, share, and adapt this work as long as you provide appropriate attribution.
+
 ## What it covers
 
 - **Culture & leisure:** music, sports, food and fashion preferences
