@@ -177,8 +177,34 @@
     },
     "working_class_rooted": {
       "name": "Popular arrelat",
-      "description": "Classe treballadora, orgull local, futbol, tradicions populars"
-    }
+      "description": "Classe treballadora, orgull local, futbol, tradicions populars"    },
+    "liberal_cosmopolitan": {
+      "name": "Liberal cosmopolita",
+      "description": "Obertura global, cultura internacional, llibertats individuals, tolerància"
+    },
+    "nationalist_conservative": {
+      "name": "Conservador nacionalista",
+      "description": "Orgull patriòtic, valors tradicionals, autoritat, família"
+    },
+    "economic_liberal": {
+      "name": "Liberal econòmic",
+      "description": "Centre-dreta, emprenedoria, llibertat econòmica, socialment tolerant"
+    },
+    "left_moderate": {
+      "name": "Esquerra moderada",
+      "description": "Socialdemocràcia, igualtat, drets socials, pragmatisme"
+    },
+    "sports_enthusiast": {
+      "name": "Apassionat de l'esport",
+      "description": "Vida activa, futbol, companyonia, esdeveniments esportius"
+    },
+    "cultural_intellectual": {
+      "name": "Intel·lectual cultural",
+      "description": "Arts, literatura, museus, pensament crític"
+    },
+    "regional_traditionalist": {
+      "name": "Tradicionalista regional",
+      "description": "Identitat territorial, costums locals, llengua pròpia, comunitat"    }
   },
   "match": {
     "title": "Troba la teva regió ideal",

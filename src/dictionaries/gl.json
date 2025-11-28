@@ -178,8 +178,34 @@
     },
     "working_class_rooted": {
       "name": "Popular arraigado",
-      "description": "Clase traballadora, orgullo local, fútbol, tradicións populares"
-    }
+      "description": "Clase traballadora, orgullo local, fútbol, tradicións populares"    },
+    "liberal_cosmopolitan": {
+      "name": "Liberal cosmopolita",
+      "description": "Apertura global, cultura internacional, liberdades individuais, tolerancia"
+    },
+    "nationalist_conservative": {
+      "name": "Conservador nacionalista",
+      "description": "Orgullo patrio, valores tradicionais, autoridade, familia"
+    },
+    "economic_liberal": {
+      "name": "Liberal económico",
+      "description": "Centro-dereita, emprendemento, liberdade económica, socialmente tolerante"
+    },
+    "left_moderate": {
+      "name": "Esquerda moderada",
+      "description": "Socialdemocracia, igualdade, dereitos sociais, pragmatismo"
+    },
+    "sports_enthusiast": {
+      "name": "Apaixonado do deporte",
+      "description": "Vida activa, fútbol, camaradería, eventos deportivos"
+    },
+    "cultural_intellectual": {
+      "name": "Intelectual cultural",
+      "description": "Artes, literatura, museos, pensamento crítico"
+    },
+    "regional_traditionalist": {
+      "name": "Tradicionalista rexional",
+      "description": "Identidade territorial, costumes locais, lingua propia, comunidade"    }
   },
   "match": {
     "title": "Atopa a túa rexión ideal",

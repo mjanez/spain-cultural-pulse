@@ -181,6 +181,34 @@
     "working_class_rooted": {
       "name": "Langile klase errotua",
       "description": "Langile klasea, harro lokala, futbola, tradizio herrikoiak"
+    },
+    "liberal_cosmopolitan": {
+      "name": "Kosmopolita liberala",
+      "description": "Irekitasun globala, nazioarteko kultura, askatasun indibidualak, tolerantzia"
+    },
+    "nationalist_conservative": {
+      "name": "Kontserbadore nazionalista",
+      "description": "Aberri-harrotasuna, balio tradizionalak, autoritatea, familia"
+    },
+    "economic_liberal": {
+      "name": "Liberal ekonomikoa",
+      "description": "Erdiko eskuina, ekintzailetza, askatasun ekonomikoa, sozialki tolerantea"
+    },
+    "left_moderate": {
+      "name": "Ezker moderatua",
+      "description": "Sozialdemokrazia, berdintasuna, eskubide sozialak, pragmatismoa"
+    },
+    "sports_enthusiast": {
+      "name": "Kirol zalea",
+      "description": "Bizitza aktiboa, futbola, konpainiakoa, kirol-gertaerak"
+    },
+    "cultural_intellectual": {
+      "name": "Kultural intelektuala",
+      "description": "Arteak, literatura, museoak, pentsamendu kritikoa"
+    },
+    "regional_traditionalist": {
+      "name": "Eskualdeko tradizionalista",
+      "description": "Lurralde-identitatea, tokiko ohiturak, hizkuntza propioa, komunitatea"
     }
   },
   "match": {

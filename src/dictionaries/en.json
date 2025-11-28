@@ -179,8 +179,34 @@
     },
     "working_class_rooted": {
       "name": "Rooted Working Class",
-      "description": "Working class, local pride, football, popular traditions"
-    }
+      "description": "Working class, local pride, football, popular traditions"    },
+    "liberal_cosmopolitan": {
+      "name": "Cosmopolitan Liberal",
+      "description": "Global openness, international culture, individual freedoms, tolerance"
+    },
+    "nationalist_conservative": {
+      "name": "Nationalist Conservative",
+      "description": "National pride, traditional values, authority, family"
+    },
+    "economic_liberal": {
+      "name": "Economic Liberal",
+      "description": "Centre-right, entrepreneurship, economic freedom, socially tolerant"
+    },
+    "left_moderate": {
+      "name": "Moderate Left",
+      "description": "Social democracy, equality, social rights, pragmatism"
+    },
+    "sports_enthusiast": {
+      "name": "Sports Enthusiast",
+      "description": "Active lifestyle, football, camaraderie, sporting events"
+    },
+    "cultural_intellectual": {
+      "name": "Cultural Intellectual",
+      "description": "Arts, literature, museums, critical thinking"
+    },
+    "regional_traditionalist": {
+      "name": "Regional Traditionalist",
+      "description": "Territorial identity, local customs, own language, community"    }
   },
   "match": {
     "title": "Find your ideal region",

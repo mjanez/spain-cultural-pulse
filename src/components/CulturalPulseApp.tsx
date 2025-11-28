@@ -702,32 +702,50 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     })));
     console.log('Dynamic maxDistance:', dynamicMaxDistance.toFixed(2));
 
-    // Clasificación de tribu basada en distancia a arquetipos (15 dimensiones críticas)
+    // Clasificación de tribu usando todas las 28 dimensiones con pesos balanceados
     let tribeId = 'middle_class_moderate';
     let minTribeDistance = Infinity;
 
     Object.entries(TRIBES).forEach(([id, tribeProfile]) => {
       const tribeDiffs = [
-        // Dimensiones políticas (peso x3)
-        Math.pow(userProfile.politics_leftright - tribeProfile.politics_leftright, 2) * 3,
-        Math.pow(userProfile.politics_equality - tribeProfile.politics_equality, 2) * 3,
-        Math.pow(userProfile.politics_environment - tribeProfile.politics_environment, 2) * 2,
-        // Valores morales (peso x3)
-        Math.pow(userProfile.values_authority - tribeProfile.values_authority, 2) * 3,
-        Math.pow(userProfile.values_purity - tribeProfile.values_purity, 2) * 2,
-        Math.pow(userProfile.values_care - tribeProfile.values_care, 2) * 2,
-        // Temas sociales (peso x2.5)
-        Math.pow(userProfile.social_lgbt - tribeProfile.social_lgbt, 2) * 2.5,
-        Math.pow(userProfile.social_abortion - tribeProfile.social_abortion, 2) * 2.5,
-        Math.pow(userProfile.social_immigration - tribeProfile.social_immigration, 2) * 2,
-        // Identidad y religión (peso x2)
-        Math.pow(userProfile.identity_spanish - tribeProfile.identity_spanish, 2) * 2,
+        // Música (5 dimensiones, peso x1.2 cada una)
+        Math.pow(userProfile.music_rock - tribeProfile.music_rock, 2) * 1.2,
+        Math.pow(userProfile.music_pop - tribeProfile.music_pop, 2) * 1.2,
+        Math.pow(userProfile.music_reggaeton - tribeProfile.music_reggaeton, 2) * 1.2,
+        Math.pow(userProfile.music_classical - tribeProfile.music_classical, 2) * 1.2,
+        Math.pow(userProfile.music_traditional - tribeProfile.music_traditional, 2) * 1.2,
+        // Política (3 dimensiones, peso x4)
+        Math.pow(userProfile.politics_leftright - tribeProfile.politics_leftright, 2) * 4,
+        Math.pow(userProfile.politics_environment - tribeProfile.politics_environment, 2) * 4,
+        Math.pow(userProfile.politics_equality - tribeProfile.politics_equality, 2) * 4,
+        // Valores morales (3 dimensiones, peso x3.5)
+        Math.pow(userProfile.values_care - tribeProfile.values_care, 2) * 3.5,
+        Math.pow(userProfile.values_authority - tribeProfile.values_authority, 2) * 3.5,
+        Math.pow(userProfile.values_purity - tribeProfile.values_purity, 2) * 3.5,
+        // Temas sociales (4 dimensiones, peso x3)
+        Math.pow(userProfile.social_immigration - tribeProfile.social_immigration, 2) * 3,
+        Math.pow(userProfile.social_lgbt - tribeProfile.social_lgbt, 2) * 3,
+        Math.pow(userProfile.social_abortion - tribeProfile.social_abortion, 2) * 3,
+        Math.pow(userProfile.social_feminism - tribeProfile.social_feminism, 2) * 3,
+        // Cultura (3 dimensiones, peso x1.5)
+        Math.pow(userProfile.culture_reading - tribeProfile.culture_reading, 2) * 1.5,
+        Math.pow(userProfile.culture_sports - tribeProfile.culture_sports, 2) * 1.5,
+        Math.pow(userProfile.culture_museums - tribeProfile.culture_museums, 2) * 1.5,
+        // Identidad (2 dimensiones, peso x2.5)
+        Math.pow(userProfile.identity_spanish - tribeProfile.identity_spanish, 2) * 2.5,
+        Math.pow(userProfile.identity_regional - tribeProfile.identity_regional, 2) * 2.5,
+        // Religión (peso x2)
         Math.pow(userProfile.religiosity - tribeProfile.religiosity, 2) * 2,
-        // Cultura y estilo de vida (peso x1)
-        Math.pow(userProfile.music_traditional - tribeProfile.music_traditional, 2),
-        Math.pow(userProfile.culture_reading - tribeProfile.culture_reading, 2),
-        Math.pow(userProfile.mobility_car - tribeProfile.mobility_car, 2),
-        Math.pow(userProfile.food_adventurous - tribeProfile.food_adventurous, 2),
+        // Gastronomía (2 dimensiones, peso x0.8)
+        Math.pow(userProfile.food_adventurous - tribeProfile.food_adventurous, 2) * 0.8,
+        Math.pow(userProfile.food_social - tribeProfile.food_social, 2) * 0.8,
+        // Movilidad (3 dimensiones, peso x1.2)
+        Math.pow(userProfile.mobility_car - tribeProfile.mobility_car, 2) * 1.2,
+        Math.pow(userProfile.mobility_public - tribeProfile.mobility_public, 2) * 1.2,
+        Math.pow(userProfile.mobility_active - tribeProfile.mobility_active, 2) * 1.2,
+        // Socioeconómico (2 dimensiones, peso x0.5)
+        Math.pow(userProfile.socioeconomic_education - tribeProfile.socioeconomic_education, 2) * 0.5,
+        Math.pow(userProfile.socioeconomic_income - tribeProfile.socioeconomic_income, 2) * 0.5,
       ];
       
       const tribeDist = Math.sqrt(tribeDiffs.reduce((sum, val) => sum + val, 0));

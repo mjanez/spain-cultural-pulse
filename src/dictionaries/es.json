@@ -159,28 +159,56 @@
   },
   "tribes": {
     "conservative_traditional": {
-      "name": "Conservador Tradicional",
+      "name": "Conservador tradicional",
       "description": "Valores tradicionales, familia, religioso, conservador"
     },
     "progressive_urban": {
-      "name": "Progresista Urbano",
+      "name": "Progresista urbano",
       "description": "Cosmopolita, progresista, cultural, movilidad sostenible"
     },
     "young_partygoer": {
-      "name": "Joven Fiestero",
+      "name": "Joven fiestero",
       "description": "Música urbana, fiesta, ocio nocturno, redes sociales"
     },
     "middle_class_moderate": {
-      "name": "Clase Media Moderada",
+      "name": "Clase media moderada",
       "description": "Centrista, pragmático, familia y trabajo"
     },
     "ecologist_alternative": {
-      "name": "Ecologista Alternativo",
+      "name": "Ecologista alternativo",
       "description": "Medio ambiente, consumo responsable, indie, sostenibilidad"
     },
     "working_class_rooted": {
-      "name": "Popular Arraigado",
+      "name": "Popular arraigado",
       "description": "Clase trabajadora, orgullo local, fútbol, tradiciones populares"
+    },
+    "liberal_cosmopolitan": {
+      "name": "Liberal cosmopolita",
+      "description": "Apertura global, cultura internacional, libertades individuales, tolerancia"
+    },
+    "nationalist_conservative": {
+      "name": "Conservador Nacionalista",
+      "description": "Orgullo patrio, valores tradicionales, autoridad, familia"
+    },
+    "economic_liberal": {
+      "name": "Liberal económico",
+      "description": "Centro-derecha, emprendimiento, libertad económica, socialmente tolerante"
+    },
+    "left_moderate": {
+      "name": "Izquierda moderada",
+      "description": "Socialdemocracia, igualdad, derechos sociales, pragmatismo"
+    },
+    "sports_enthusiast": {
+      "name": "Apasionado del deporte",
+      "description": "Vida activa, fútbol, camaradería, eventos deportivos"
+    },
+    "cultural_intellectual": {
+      "name": "Intelectual cultural",
+      "description": "Artes, literatura, museos, pensamiento crítico"
+    },
+    "regional_traditionalist": {
+      "name": "Tradicionalista regional",
+      "description": "Identidad territorial, costumbres locales, lengua propia, comunidad"
     }
   },
   "match": {
