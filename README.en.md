@@ -5,9 +5,6 @@
 Interactive webapp to explore culture, values, and politics in contemporary Spain through visualizations powered by open data.
 
 - **[View Demo](https://mjanez.github.io/spain-cultural-pulse)**
-
-- **[View Demo](https://mjanez.github.io/spain-cultural-pulse)** ·
-
 ## About
 
 Web application built with Next.js that enables analysis and visualization of cultural and social patterns in Spain. Data comes from a representative survey of 3,000 Spanish adults conducted in 2024.
@@ -60,3 +57,6 @@ The project automatically deploys to GitHub Pages via GitHub Actions when pushin
 npm run build
 ```
 
+## License
+
+This project is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). You are free to use, share, and adapt this work as long as you provide appropriate attribution.
