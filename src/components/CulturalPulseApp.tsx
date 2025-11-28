@@ -25,7 +25,9 @@ import {
   Languages,
   Download,
   Link as LinkIcon,
-  Github
+  Github,
+  Check,
+  X
 } from 'lucide-react';
 import { 
   Radar, 
@@ -119,9 +121,10 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
+  const [toast, setToast] = useState<{show: boolean, message: string, type: 'success' | 'error'}>({show: false, message: '', type: 'success'});
+  const [copied, setCopied] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const shareDropdownRef = useRef<HTMLDivElement>(null);
-  const resultsRef = useRef<HTMLDivElement>(null);
   
   const currentLang = lang || 'es';
   
@@ -188,52 +191,55 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Funciones para compartir
-  const generateShareUrl = () => {
-    const encoded = encodeAnswers(answers);
-    const baseUrl = window.location.origin + window.location.pathname;
-    return `${baseUrl}?a=${encoded}`;
+  // Auto-hide toast
+  useEffect(() => {
+    if (toast.show) {
+      const timer = setTimeout(() => {
+        setToast({...toast, show: false});
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast.show]);
+
+  // Función para mostrar toast
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({show: true, message, type});
   };
 
+  // Función para compartir
   const copyLinkToClipboard = async () => {
     try {
-      const shareUrl = generateShareUrl();
+      const encoded = encodeAnswers(answers);
+      const baseUrl = window.location.origin + window.location.pathname;
+      const shareUrl = `${baseUrl}?a=${encoded}`;
       await navigator.clipboard.writeText(shareUrl);
-      alert(dict.results.link_copied);
-      setShareMenuOpen(false);
+      setCopied(true);
+      showToast(dict.results.link_copied || '¡Enlace copiado!', 'success');
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      alert(dict.results.share_failed);
+      showToast(dict.results.share_failed || 'Error al copiar', 'error');
     }
   };
 
-  const downloadResultsImage = async () => {
-    if (!resultsRef.current) return;
-    
-    try {
-      const canvas = await html2canvas(resultsRef.current, {
-        backgroundColor: '#020617',
-        scale: 2,
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        foreignObjectRendering: true,
-        scrollY: -window.scrollY,
-        scrollX: -window.scrollX,
-        windowWidth: resultsRef.current.scrollWidth,
-        windowHeight: resultsRef.current.scrollHeight
-      });
-      
-      const link = document.createElement('a');
-      link.download = `cultural-pulse-${Date.now()}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      
-      alert(dict.results.image_downloaded);
-      setShareMenuOpen(false);
-    } catch (err) {
-      console.error('Error generating image:', err);
-      alert(dict.results.share_failed);
-    }
+  // Funciones para compartir en redes sociales
+  const shareToTwitter = () => {
+    const encoded = encodeAnswers(answers);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?a=${encoded}`;
+    const text = `${dict.results.share_twitter || '¡Descubre tu perfil cultural en España!'} 🇪🇸`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const shareToFacebook = () => {
+    const encoded = encodeAnswers(answers);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?a=${encoded}`;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const shareToWhatsApp = () => {
+    const encoded = encodeAnswers(answers);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?a=${encoded}`;
+    const text = `${dict.results.share_whatsapp || '¡Mira mi perfil cultural en España!'} 🇪🇸`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + shareUrl)}`, '_blank');
   };
 
   // Language Selector Component
@@ -983,66 +989,248 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     const politicalY = results.userProfile.values_authority; // 0=libertario, 10=autoritario
 
     return (
-      <div className="min-h-screen bg-slate-950 text-white p-4 md:p-8 font-sans">
-        <LanguageSelector />
-        
-        <div className="max-w-4xl mx-auto space-y-6">
-          
-          <div className="flex justify-between items-center mb-8">
-            <button onClick={() => {
-              sessionStorage.clear();
-              window.location.reload();
-            }} className="text-gray-400 hover:text-white flex items-center gap-2">
-              <RefreshCw size={18} /> {dict.results.restart}
-            </button>
-            
-            {/* GitHub Link - centered */}
-            <a 
-              href={process.env.GITHUB_REPO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
-              aria-label={dict.home.github_link}
-            >
-              <Github className="w-4 h-4" />
-              <span>{dict.home.github_link}</span>
-            </a>
-            
-            {/* Share Menu */}
-            <div className="relative" ref={shareDropdownRef}>
-              <button 
-                onClick={() => setShareMenuOpen(!shareMenuOpen)}
-                className="text-pink-400 hover:text-pink-300 flex items-center gap-2 font-bold"
-              >
-                <Share2 size={18} /> {dict.results.share}
-              </button>
-              
-              {shareMenuOpen && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md z-50">
-                  <button
-                    onClick={copyLinkToClipboard}
-                    className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-pink-300 transition-all duration-200"
-                  >
-                    <LinkIcon className="w-4 h-4" />
-                    <span className="text-sm">{dict.results.copy_link}</span>
-                  </button>
-                  <button
-                    onClick={downloadResultsImage}
-                    className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-pink-300 transition-all duration-200"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span className="text-sm">{dict.results.download_image}</span>
-                  </button>
-                </div>
+      <div className="min-h-screen bg-slate-950 text-white font-sans">
+        {/* Toast Notification */}
+        {toast.show && (
+          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[60] animate-slide-down">
+            <div className={`flex items-center gap-3 px-6 py-3 rounded-xl shadow-2xl backdrop-blur-md border ${
+              toast.type === 'success' 
+                ? 'bg-green-500/90 border-green-400/50' 
+                : 'bg-red-500/90 border-red-400/50'
+            }`}>
+              {toast.type === 'success' ? (
+                <Check className="w-5 h-5 text-white" />
+              ) : (
+                <X className="w-5 h-5 text-white" />
               )}
+              <span className="text-white font-semibold">{toast.message}</span>
             </div>
           </div>
+        )}
 
-          {/* Contenedor con ref para captura de imagen */}
-          <div ref={resultsRef}>
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-3xl p-8 text-center shadow-2xl shadow-indigo-900/50 relative overflow-hidden">
+        {/* Navbar Sticky */}
+        <nav className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-between gap-2">
+              {/* Botón Reiniciar */}
+              <button 
+                onClick={() => {
+                  sessionStorage.clear();
+                  window.location.reload();
+                }} 
+                className="text-gray-400 hover:text-white flex items-center gap-2 transition-colors"
+                title={dict.results?.restart || 'Reiniciar'}
+              >
+                <RefreshCw size={18} />
+                <span className="hidden md:inline text-sm">{dict.results?.restart || 'Reiniciar'}</span>
+              </button>
+              
+              {/* Botón GitHub */}
+              <a 
+                href={process.env.GITHUB_REPO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white flex items-center gap-2 transition-colors"
+                aria-label={dict.home?.github_link || 'GitHub'}
+                title={dict.home?.github_link || 'Ver código fuente'}
+              >
+                <Github className="w-4 h-4" />
+                <span className="hidden md:inline text-sm">{dict.home?.github_link || 'GitHub'}</span>
+              </a>
+              
+              {/* Botón Compartir con menú desplegable */}
+              <div className="relative" ref={shareDropdownRef}>
+                <button 
+                  onClick={() => setShareMenuOpen(!shareMenuOpen)}
+                  className="text-pink-400 hover:text-pink-300 flex items-center gap-2 font-semibold transition-colors"
+                >
+                  {copied ? <Check size={18} className="text-green-400" /> : <Share2 size={18} />}
+                  <span className="hidden md:inline text-sm">{dict.results?.share || 'Compartir'}</span>
+                </button>
+                
+                {shareMenuOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md">
+                    <button
+                      onClick={copyLinkToClipboard}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-pink-300 transition-all duration-200"
+                    >
+                      <LinkIcon className="w-4 h-4" />
+                      <span className="text-sm">{dict.results?.copy_link || 'Copiar enlace'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        shareToTwitter();
+                        setShareMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-blue-400 transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span className="text-sm">Twitter</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        shareToFacebook();
+                        setShareMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-blue-500 transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      <span className="text-sm">Facebook</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        shareToWhatsApp();
+                        setShareMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-green-400 transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                      <span className="text-sm">WhatsApp</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+              
+              {/* Selector de idioma - solo bandera en móvil */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                  className="flex items-center gap-1 md:gap-2 px-2 py-1.5 md:px-3 md:py-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors border border-slate-700/50"
+                  aria-label={dict.language?.select || 'Language'}
+                  title={dict.language?.select || 'Seleccionar idioma'}
+                >
+                  {currentLang === 'val' ? (
+                    <div className="w-5 h-5 overflow-hidden rounded-sm flex-shrink-0">
+                      <Image 
+                        src="/flags/val.png" 
+                        alt="Valencian flag" 
+                        width={20} 
+                        height={20} 
+                      />
+                    </div>
+                  ) : (
+                    <span className={`fi fi-${
+                      currentLang === 'es' ? 'es' : 
+                      currentLang === 'en' ? 'gb' : 
+                      currentLang === 'eu' ? 'es-pv' : 
+                      currentLang === 'ca' ? 'es-ct' : 
+                      currentLang === 'gl' ? 'es-ga' : 'es'
+                    } fis text-lg`}></span>
+                  )}
+                  <span className="hidden md:inline text-xs text-gray-300">
+                    {currentLang.toUpperCase()}
+                  </span>
+                </button>
+                
+                {langDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-40 md:w-44 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md z-50">
+                    <button
+                      onClick={() => {
+                        switchLanguage('es');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'es' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es fis"></span>
+                      <span className="text-sm">{dict.language?.es || 'Español'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('en');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'en' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-gb fis"></span>
+                      <span className="text-sm">{dict.language?.en || 'English'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('eu');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'eu' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es-pv fis"></span>
+                      <span className="text-sm">{dict.language?.eu || 'Euskara'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('ca');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'ca' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es-ct fis"></span>
+                      <span className="text-sm">{dict.language?.ca || 'Català'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('val');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'val' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
+                        <Image 
+                          src="/flags/val.png" 
+                          alt="Valencian flag" 
+                          width={21} 
+                          height={16} 
+                          className="object-cover object-left" 
+                          style={{marginLeft: 0}}
+                        />
+                      </div>
+                      <span className="text-sm">Valencià</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('gl');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'gl' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es-ga fis"></span>
+                      <span className="text-sm">{dict.language?.gl || 'Galego'}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        {/* Contenido principal con padding-top para navbar */}
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-6 md:py-8">
+          {/* Sección de resultados con animaciones */}
+          <div className="animate-fade-in">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-3xl p-8 text-center shadow-2xl shadow-indigo-900/50 relative overflow-hidden animate-slide-up">
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-              <Trophy className="w-12 h-12 mx-auto text-yellow-300 mb-4" />
+              <Trophy className="w-12 h-12 mx-auto text-yellow-300 mb-4 animate-bounce" />
               <h2 className="text-lg uppercase tracking-widest opacity-80 mb-2">{dict.results.your_tribe}</h2>
               <h1 className="text-4xl md:text-6xl font-black mb-4 text-white drop-shadow-lg">
                 {results.tribeName}
@@ -1054,7 +1242,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
 
           <div className="grid md:grid-cols-2 gap-6 my-6">
             
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 animate-slide-up animation-delay-100">
               <div className="flex items-center gap-3 mb-6">
                 <MapPin className="text-pink-500" />
                 <h3 className="text-xl font-bold">{dict.results.cultural_home}</h3>
@@ -1129,19 +1317,19 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center animate-slide-up animation-delay-200">
               <div className="flex items-center gap-3 mb-4 self-start w-full">
                 <Activity className="text-cyan-500" />
                 <h3 className="text-xl font-bold">{dict.results.you_vs_spain}</h3>
               </div>
               
-              {/* Radar Chart */}
+              {/* Radar Chart con tooltips mejorados */}
               <div className="w-full h-64 text-xs mb-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
                     <PolarGrid stroke="#334155" />
                     <PolarAngleAxis dataKey="subject" stroke="#94a3b8" />
-                    <PolarRadiusAxis angle={30} domain={[0, 5]} tick={false} axisLine={false} />
+                    <PolarRadiusAxis angle={30} domain={[0, 10]} tick={false} axisLine={false} />
                     <Radar
                       name={dict.results.radar.you}
                       dataKey="A"
@@ -1160,7 +1348,19 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     />
                     <Legend />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', color: '#f1f5f9' }}
+                      contentStyle={{ 
+                        backgroundColor: '#0f172a', 
+                        borderColor: '#334155', 
+                        borderRadius: '8px',
+                        padding: '12px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)'
+                      }}
+                      labelStyle={{ color: '#f1f5f9', fontWeight: 'bold', marginBottom: '4px' }}
+                      itemStyle={{ color: '#cbd5e1' }}
+                      formatter={(value: number, name: string) => {
+                        const percentage = ((value / 10) * 100).toFixed(0);
+                        return [`${value.toFixed(1)}/10 (${percentage}%)`, name];
+                      }}
                     />
                   </RadarChart>
                 </ResponsiveContainer>
@@ -1253,7 +1453,6 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               </a>
             </div>
           </div>
-          {/* Fin contenedor captura imagen */}
 
         </div>
       </div>
