@@ -101,7 +101,8 @@
     "image_downloaded": "Imaxe descargada!",
     "share_failed": "Non se puido compartir. Proba a copiar a ligazón.",    "share_twitter": "Descubre o teu perfil cultural en España!",
     "share_whatsapp": "Mira o meu perfil cultural en España!",    "your_tribe": "A túa tribo cultural é",
-    "political_position": "A túa posición política",
+    "political_position": "A túa posición política",    "closest_parties": "Partidos máis afíns",
+    "closest_parties_info": "Os 3 partidos políticos con posicións máis próximas ao teu posición política.",
     "political_quadrants": {
       "auth_left": "Esq. Autoritaria",
       "auth_right": "Der. Autoritaria",
@@ -114,12 +115,17 @@
       "you": "Ti",
       "spain": "España",
       "left_right_axis": "Esquerda-Dereita",
-      "auth_lib_axis": "Autoritario-Libertario"
+      "auth_lib_axis": "Autoritario-Libertario",
+      "left_right_short": "esq-der",
+      "auth_lib_short": "aut-lib"
     },
     "tribe_desc": "Os teus patróns de consumo cultural e valores sociais distínguente da media nacional, inclinándote cara a un perfil único.",
     "cultural_home": "O teu \"Fogar\" Cultural",
     "affinity": "A túa maior afinidade é con:",
     "top_3": "Top 3 Afinidades Rexionais",
+    "identity_label": "A Túa Identidade",
+    "identity_spanish": "Española",
+    "identity_regional": "Rexional",
     "you_vs_spain": "Ti vs. España",
     "comparison_desc": "Comparativa dos teus gustos coa media do estudo NORPOL 2024.",
     "info": "Esta análise utiliza datos do <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudo sobre Normas Sociais na Política 2024</strong></a>. Os perfís rexionais calculáronse agregando as respostas dos 3.015 participantes orixinais e buscando a menor distancia vectorial coas túas preferencias.",

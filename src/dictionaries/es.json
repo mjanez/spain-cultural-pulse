@@ -104,6 +104,8 @@
     "share_whatsapp": "¡Mira mi perfil cultural en España!",
     "your_tribe": "Tu Tribu Cultural es",
     "political_position": "Tu Posición Política",
+    "closest_parties": "Partidos más afines",
+    "closest_parties_info": "Los 3 partidos políticos con posiciones más cercanas a tu posición política.",
     "political_quadrants": {
       "auth_left": "Izq. Autoritaria",
       "auth_right": "Der. Autoritaria",
@@ -116,12 +118,17 @@
       "you": "Tú",
       "spain": "España",
       "left_right_axis": "Izquierda-Derecha",
-      "auth_lib_axis": "Autoritario-Libertario"
+      "auth_lib_axis": "Autoritario-Libertario",
+      "left_right_short": "izq-der",
+      "auth_lib_short": "aut-lib"
     },
     "tribe_desc": "Tus patrones de consumo cultural y valores sociales te distinguen del promedio nacional, inclinándote hacia un perfil único.",
     "cultural_home": "Tu \"Hogar\" Cultural",
     "affinity": "Tu mayor afinidad es con:",
     "top_3": "Top 3 Afinidades Regionales",
+    "identity_label": "Tu Identidad",
+    "identity_spanish": "Española",
+    "identity_regional": "Regional",
     "you_vs_spain": "Tú vs. España",
     "comparison_desc": "Comparativa de tus gustos con la media del estudio NORPOL 2024.",
     "info": "Este análisis utiliza datos del <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudio sobre Normas Sociales en la Política 2024</strong></a>. Los perfiles regionales se han calculado agregando las respuestas de los 3,015 participantes originales y buscando la menor distancia vectorial con tus preferencias.",

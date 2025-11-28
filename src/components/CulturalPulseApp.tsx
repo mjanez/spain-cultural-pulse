@@ -42,6 +42,7 @@ import {
 } from 'recharts';
 import regionalData from '@/data/regional_profiles_complete.json';
 import tribesData from '@/data/cultural_tribes.json';
+import { calculateTopParties } from '@/lib/partyCalculator';
 
 const MapComponent = dynamic(() => import('./MapComponent'), { 
   ssr: false,
@@ -867,6 +868,9 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     const bestMatchData = REGIONAL_PROFILES[matchScores[0].region] as any;
     const bestMatchDisplayName = bestMatchData?.displayName || matchScores[0].region;
 
+    // Calcular los 3 partidos políticos más afines usando el módulo externo
+    const topParties = calculateTopParties(userProfile, matchScores);
+
     return {
       userProfile,
       bestMatch: matchScores[0].region,
@@ -879,7 +883,8 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
       similarityIndex,
       similarityCategory,
       regionsCloser,
-      avgRadarDiff
+      avgRadarDiff,
+      topParties
     };
   }, [view, answers, dict]);
 
@@ -1499,6 +1504,50 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   );
                 })}
               </div>
+
+              {/* Identidad: Española ← → Regional */}
+              <div className="mt-6 pt-6 border-t border-slate-700">
+                <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">{dict.results.identity_label || 'Tu Identidad'}</p>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded border border-slate-600 overflow-hidden shadow-sm flex-shrink-0">
+                        <Image 
+                          src="/flags/españa.jpg"
+                          alt="España"
+                          width={20}
+                          height={20}
+                          className="object-contain w-full h-full"
+                        />
+                      </div>
+                      <span className="font-medium text-red-400">{results.userProfile.identity_spanish.toFixed(1)}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-medium text-green-400">{results.userProfile.identity_regional.toFixed(1)}</span>
+                      <div className="w-5 h-5 rounded border border-slate-600 overflow-hidden shadow-sm flex-shrink-0">
+                        <Image 
+                          src={`${process.env.PAGES_BASE_PATH || ''}/flags/autonomias/${results.matchScores[0].regionId}.jpg`}
+                          alt={results.matchScores[0].displayName || results.matchScores[0].region}
+                          width={20}
+                          height={20}
+                          className="object-contain w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative h-3 bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-600 to-yellow-500"
+                      style={{ width: `${(results.userProfile.identity_spanish / (results.userProfile.identity_spanish + results.userProfile.identity_regional)) * 100}%` }}
+                    ></div>
+                    <div 
+                      className="absolute inset-y-0 right-0 bg-gradient-to-l from-green-600 to-emerald-500"
+                      style={{ width: `${(results.userProfile.identity_regional / (results.userProfile.identity_spanish + results.userProfile.identity_regional)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center animate-slide-up animation-delay-200">
@@ -1596,7 +1645,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     className="absolute w-4 h-4 bg-pink-500 rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 z-10"
                     style={{
                       left: `${4 + (politicalX / 10) * 92}%`,
-                      top: `${4 + (politicalY / 10) * 92}%`
+                      top: `${96 - (politicalY / 10) * 92}%`
                     }}
                   >
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-pink-400">
@@ -1609,7 +1658,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     className="absolute w-3 h-3 bg-cyan-500 rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2"
                     style={{
                       left: `${4 + (NATIONAL_AVG.politics_leftright / 10) * 92}%`,
-                      top: `${4 + (NATIONAL_AVG.values_authority / 10) * 92}%`
+                      top: `${96 - (NATIONAL_AVG.values_authority / 10) * 92}%`
                     }}
                   >
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs text-cyan-400">
@@ -1618,9 +1667,63 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   </div>
                 </div>
                 
-                <div className="mt-4 text-center text-sm text-gray-400">
-                  <p>{dict.results.political_quadrants.left_right_axis}: <span className="text-white font-bold">{politicalX.toFixed(1)}/10</span></p>
-                  <p>{dict.results.political_quadrants.auth_lib_axis}: <span className="text-white font-bold">{politicalY.toFixed(1)}/10</span></p>
+                <div className="mt-4 text-center text-xs text-gray-500 space-y-1">
+                  <div>
+                    <span className="text-white font-semibold">{dict.results.political_quadrants.you}:</span> {politicalX.toFixed(1)}/10 {dict.results.political_quadrants.left_right_short} · {politicalY.toFixed(1)}/10 {dict.results.political_quadrants.auth_lib_short}
+                  </div>
+                </div>
+              </div>
+
+              {/* Political Parties Section */}
+              <div className="w-full mt-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Users className="text-amber-500" />
+                  <h3 className="text-lg font-bold">{dict.results.closest_parties}</h3>
+                  <div className="group relative">
+                    <Info className="w-4 h-4 text-gray-400 hover:text-amber-400 cursor-help transition-colors" />
+                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                      {dict.results.closest_parties_info}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-slate-800/50 to-slate-800/30 rounded-xl p-4 border border-slate-700/50">
+                  <div className="flex gap-6 justify-center items-center">
+                    {results.topParties.map((party, idx) => {
+                      const isRectangular = party.logo_shape === 'rectangular';
+                      return (
+                        <div key={party.id} className="flex flex-col items-center gap-2">
+                          <a 
+                            href={party.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="transition-all hover:scale-110 hover:brightness-110"
+                            title={`${party.name_es} - ${Math.round(party.similarity)}% ${dict.results.closest_parties_info || 'afín'}`}
+                          >
+                            <div className="relative">
+                              <img 
+                                src={party.logo} 
+                                alt={party.name_short}
+                                className={`${isRectangular ? 'w-20 h-16 rounded-lg' : 'w-16 h-16 rounded-full'} object-contain border-3 shadow-xl bg-white/5 p-1`}
+                                style={{ borderColor: party.color, borderWidth: '3px' }}
+                              />
+                              {idx === 0 && (
+                                <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-xs font-bold text-white shadow-lg border-2 border-slate-900">
+                                  1
+                                </div>
+                              )}
+                            </div>
+                          </a>
+                          <div className="text-center">
+                            <div className="text-sm font-bold" style={{ color: party.color }}>
+                              {party.name_short}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
                 </div>
               </div>
             </div>

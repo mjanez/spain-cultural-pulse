@@ -103,7 +103,8 @@
     "share_twitter": "Deskubritu zure profil kulturala Espainian!",
     "share_whatsapp": "Ikus ezazu nire profil kulturala Espainian!",
     "your_tribe": "Zure tribu kulturala da",
-    "political_position": "Zure posizio politikoa",
+    "political_position": "Zure posizio politikoa",    "closest_parties": "Alderdirik hurbilenak",
+    "closest_parties_info": "Zure posizio politikoarekin hurbilen dauden 3 alderdi politikoak.",
     "political_quadrants": {
       "auth_left": "Ezk. Autoritarioa",
       "auth_right": "Esk. Autoritarioa",
@@ -116,12 +117,17 @@
       "you": "Zu",
       "spain": "Espainia",
       "left_right_axis": "Ezkerra-Eskuina",
-      "auth_lib_axis": "Autoritarioa-Libertarioa"
+      "auth_lib_axis": "Autoritarioa-Libertarioa",
+      "left_right_short": "ezk-esk",
+      "auth_lib_short": "aut-lib"
     },
     "tribe_desc": "Zure kontsumo kultural ereduak eta balio sozialak nabarmentzen zaituzte batez bestekotik, profil paregabe batera makurtuz.",
     "cultural_home": "Zure \"Etxe\" Kulturala",
     "affinity": "Zure afinitate handiena honekin da:",
     "top_3": "Top 3 eskualdeko afinitateak",
+    "identity_label": "Zure Identitatea",
+    "identity_spanish": "Espainiarra",
+    "identity_regional": "Eskualdekoa",
     "you_vs_spain": "Zu vs. Espainia",
     "comparison_desc": "Zure gust oen konparaketa NORPOL 2024 azterlanaren batez bestekoarekin.",
     "info": "Analisi honek <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Politikaren Arau Sozialen Gaineko Ikerketaren 2024ko datuak</strong></a> erabiltzen ditu. Eskualde profilak jatorrizko 3.015 partaideen erantzunak batu eta zure lehentasunekin distantzia bektorial txikiena bilatuz kalkulatu dira.",

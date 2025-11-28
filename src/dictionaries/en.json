@@ -104,6 +104,8 @@
     "share_whatsapp": "Check out my cultural profile in Spain!",
     "your_tribe": "Your Cultural Tribe is",
     "political_position": "Your Political Position",
+    "closest_parties": "Most Similar Parties",
+    "closest_parties_info": "The 3 political parties with positions closest to your political position.",
     "political_quadrants": {
       "auth_left": "Auth. Left",
       "auth_right": "Auth. Right",
@@ -116,12 +118,17 @@
       "you": "You",
       "spain": "Spain",
       "left_right_axis": "Left-Right",
-      "auth_lib_axis": "Authoritarian-Libertarian"
+      "auth_lib_axis": "Authoritarian-Libertarian",
+      "left_right_short": "left-right",
+      "auth_lib_short": "auth-lib"
     },
     "tribe_desc": "Your cultural consumption patterns and social values distinguish you from the national average, leaning towards a unique profile.",
     "cultural_home": "Your Cultural \"Home\"",
     "affinity": "Your highest affinity is with:",
     "top_3": "Top 3 Regional Affinities",
+    "identity_label": "Your Identity",
+    "identity_spanish": "Spanish",
+    "identity_regional": "Regional",
     "you_vs_spain": "You vs. Spain",
     "comparison_desc": "Comparison of your tastes with the average from the NORPOL 2024 study.",
     "info": "This analysis uses data from the <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\">Study on Social Norms in Politics 2024</a>. Regional profiles have been calculated by aggregating responses from the 3,015 original participants and finding the smallest vector distance to your preferences.",    "attribution": {
