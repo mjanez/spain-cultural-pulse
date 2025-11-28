@@ -27,7 +27,8 @@ import {
   Link as LinkIcon,
   Github,
   Check,
-  X
+  X,
+  TrendingUp
 } from 'lucide-react';
 import { 
   Radar, 
@@ -123,6 +124,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [toast, setToast] = useState<{show: boolean, message: string, type: 'success' | 'error'}>({show: false, message: '', type: 'success'});
   const [copied, setCopied] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const shareDropdownRef = useRef<HTMLDivElement>(null);
   
@@ -255,7 +257,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           {currentLang === 'val' ? (
             <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
               <Image 
-                src="/flags/val.png" 
+                src="/flags/simple/val.png" 
                 alt="Valencian flag" 
                 width={16} 
                 height={16} 
@@ -348,7 +350,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           >
             <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
               <Image 
-                src="/flags/val.png" 
+                src="/flags/simple/val.png" 
                 alt="Valencian flag" 
                 width={21} 
                 height={16} 
@@ -675,7 +677,15 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
       if (diff < bestMatch.score) {
         bestMatch = { region, score: diff };
       }
-      return { region, diff };
+      
+      // Incluir regionId y displayName del perfil
+      const regionData = REGIONAL_PROFILES[region] as any;
+      return { 
+        region, 
+        regionId: region, 
+        displayName: regionData?.displayName || region,
+        diff 
+      };
     }).sort((a, b) => a.diff - b.diff);
 
     // Calcular maxDistance dinámico basado en datos reales
@@ -732,14 +742,126 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     const tribeName = dict.tribes?.[tribeId]?.name || tribeId;
     const tribeDescription = dict.tribes?.[tribeId]?.description || '';
 
+    // Calcular distancia cultural respecto a la media nacional española
+    // Comparamos tu perfil con el perfil promedio de España (NATIONAL_AVG)
+    // Usamos los mismos pesos que para calcular las regiones
+    const weights = {
+      music: 1.0,
+      politics: 4.0,
+      food: 0.8,
+      mobility: 1.2,
+      values: 3.5,
+      social: 3.0,
+      culture: 1.5,
+      identity: 2.5,
+      religion: 2.0,
+      socioeco: 0.3
+    };
+
+    const nationalDiffs = [
+      // Música (5 dimensiones)
+      Math.abs(userProfile.music_rock - NATIONAL_AVG.music_rock) / 10 * weights.music,
+      Math.abs(userProfile.music_pop - NATIONAL_AVG.music_pop) / 10 * weights.music,
+      Math.abs(userProfile.music_reggaeton - NATIONAL_AVG.music_reggaeton) / 10 * weights.music,
+      Math.abs(userProfile.music_classical - NATIONAL_AVG.music_classical) / 10 * weights.music,
+      Math.abs(userProfile.music_traditional - NATIONAL_AVG.music_traditional) / 10 * weights.music,
+      // Política (3 dimensiones)
+      Math.abs(userProfile.politics_leftright - NATIONAL_AVG.politics_leftright) / 10 * weights.politics,
+      Math.abs(userProfile.politics_environment - NATIONAL_AVG.politics_environment) / 10 * weights.politics,
+      Math.abs(userProfile.politics_equality - NATIONAL_AVG.politics_equality) / 10 * weights.politics,
+      // Valores (3 dimensiones)
+      Math.abs(userProfile.values_care - NATIONAL_AVG.values_care) / 10 * weights.values,
+      Math.abs(userProfile.values_authority - NATIONAL_AVG.values_authority) / 10 * weights.values,
+      Math.abs(userProfile.values_purity - NATIONAL_AVG.values_purity) / 10 * weights.values,
+      // Social (4 dimensiones)
+      Math.abs(userProfile.social_immigration - NATIONAL_AVG.social_immigration) / 10 * weights.social,
+      Math.abs(userProfile.social_lgbt - NATIONAL_AVG.social_lgbt) / 10 * weights.social,
+      Math.abs(userProfile.social_abortion - NATIONAL_AVG.social_abortion) / 10 * weights.social,
+      Math.abs(userProfile.social_feminism - NATIONAL_AVG.social_feminism) / 10 * weights.social,
+      // Cultura (3 dimensiones)
+      Math.abs(userProfile.culture_reading - NATIONAL_AVG.culture_reading) / 10 * weights.culture,
+      Math.abs(userProfile.culture_sports - NATIONAL_AVG.culture_sports) / 10 * weights.culture,
+      Math.abs(userProfile.culture_museums - NATIONAL_AVG.culture_museums) / 10 * weights.culture,
+      // Identidad (2 dimensiones)
+      Math.abs(userProfile.identity_spanish - NATIONAL_AVG.identity_spanish) / 10 * weights.identity,
+      Math.abs(userProfile.identity_regional - NATIONAL_AVG.identity_regional) / 10 * weights.identity,
+      // Otros
+      Math.abs(userProfile.religiosity - NATIONAL_AVG.religiosity) / 10 * weights.religion,
+      Math.abs(userProfile.food_adventurous - NATIONAL_AVG.food_adventurous) / 10 * weights.food,
+      Math.abs(userProfile.food_social - NATIONAL_AVG.food_social) / 10 * weights.food,
+      Math.abs(userProfile.mobility_car - NATIONAL_AVG.mobility_car) / 10 * weights.mobility,
+      Math.abs(userProfile.mobility_public - NATIONAL_AVG.mobility_public) / 10 * weights.mobility,
+      Math.abs(userProfile.mobility_active - NATIONAL_AVG.mobility_active) / 10 * weights.mobility,
+      Math.abs(userProfile.socioeconomic_education - NATIONAL_AVG.socioeconomic_education) / 10 * weights.socioeco,
+      Math.abs(userProfile.socioeconomic_income - NATIONAL_AVG.socioeconomic_income) / 10 * weights.socioeco,
+    ];
+    
+    // Calcular similitud con la media usando las MISMAS dimensiones del radar "Tu vs España"
+    // Dimensiones agregadas (igual que el radar chart)
+    const userMusicAvg = (userProfile.music_rock + userProfile.music_pop + userProfile.music_reggaeton + userProfile.music_classical + userProfile.music_traditional) / 5;
+    const nationalMusicAvg = (NATIONAL_AVG.music_rock + NATIONAL_AVG.music_pop + NATIONAL_AVG.music_reggaeton + NATIONAL_AVG.music_classical + NATIONAL_AVG.music_traditional) / 5;
+    
+    const userSocialAvg = (userProfile.social_lgbt + userProfile.social_immigration + userProfile.social_abortion + userProfile.social_feminism) / 4;
+    const nationalSocialAvg = (NATIONAL_AVG.social_lgbt + NATIONAL_AVG.social_immigration + NATIONAL_AVG.social_abortion + NATIONAL_AVG.social_feminism) / 4;
+    
+    const userIdentityAvg = (userProfile.identity_spanish + userProfile.identity_regional) / 2;
+    const nationalIdentityAvg = (NATIONAL_AVG.identity_spanish + NATIONAL_AVG.identity_regional) / 2;
+    
+    const userCultureAvg = (userProfile.culture_reading + userProfile.culture_sports + userProfile.culture_museums) / 3;
+    const nationalCultureAvg = (NATIONAL_AVG.culture_reading + NATIONAL_AVG.culture_sports + NATIONAL_AVG.culture_museums) / 3;
+    
+    const userMobilityAvg = (userProfile.mobility_public + userProfile.mobility_car + userProfile.mobility_active) / 3;
+    const nationalMobilityAvg = (NATIONAL_AVG.mobility_public + NATIONAL_AVG.mobility_car + NATIONAL_AVG.mobility_active) / 3;
+    
+    // Diferencias en dimensiones del radar (0-10)
+    const radarDiffs = [
+      Math.abs(userMusicAvg - nationalMusicAvg),
+      Math.abs(userProfile.politics_leftright - NATIONAL_AVG.politics_leftright),
+      Math.abs(userSocialAvg - nationalSocialAvg),
+      Math.abs(userIdentityAvg - nationalIdentityAvg),
+      Math.abs(userCultureAvg - nationalCultureAvg),
+      Math.abs(userMobilityAvg - nationalMobilityAvg),
+      Math.abs(userProfile.food_adventurous - NATIONAL_AVG.food_adventurous)
+    ];
+    
+    // Distancia promedio en las dimensiones del radar
+    const avgRadarDiff = radarDiffs.reduce((sum, diff) => sum + diff, 0) / radarDiffs.length;
+    
+    // Calcular índice de similitud (inversamente proporcional a la diferencia)
+    // Si avgRadarDiff es 0 → 10/10, si es 5+ (muy diferente) → 1/10
+    const similarityIndex = Math.max(1, Math.min(10, Math.round(10 - (avgRadarDiff / 5) * 9)));
+    
+    // Calcular cuántas dimensiones están cerca (diff < 1.0)
+    const dimensionsClose = radarDiffs.filter(diff => diff < 1.0).length;
+    const regionsCloser = 7 - dimensionsClose; // Invertir: si todas cercanas → 0 regiones más cercanas
+    
+    // Categoría descriptiva basada en el índice
+    const getSimilarityCategory = (index: number): string => {
+      if (index >= 9) return 'Muy cercano';
+      if (index >= 7) return 'Cercano';
+      if (index >= 5) return 'Moderado';
+      if (index >= 3) return 'Alejado';
+      return 'Muy alejado';
+    };
+    const similarityCategory = getSimilarityCategory(similarityIndex);
+    
+    // Obtener displayName del mejor match
+    const bestMatchData = REGIONAL_PROFILES[matchScores[0].region] as any;
+    const bestMatchDisplayName = bestMatchData?.displayName || matchScores[0].region;
+
     return {
       userProfile,
       bestMatch: matchScores[0].region,
+      bestMatchDisplayName,
       matchScores,
       tribeId,
       tribeName,
       tribeDescription,
-      dynamicMaxDistance
+      dynamicMaxDistance,
+      similarityIndex,
+      similarityCategory,
+      regionsCloser,
+      avgRadarDiff
     };
   }, [view, answers, dict]);
 
@@ -852,6 +974,14 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
 
   if (view === 'quiz') {
     const q = QUIZ_QUESTIONS[currentQuestionIndex];
+    
+    // Validación: si no hay pregunta, volver a home
+    if (!q) {
+      setView('home');
+      setCurrentQuestionIndex(0);
+      return null;
+    }
+    
     const progress = ((currentQuestionIndex) / QUIZ_QUESTIONS.length) * 100;
 
     return (
@@ -1102,7 +1232,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   {currentLang === 'val' ? (
                     <div className="w-5 h-5 overflow-hidden rounded-sm flex-shrink-0">
                       <Image 
-                        src="/flags/val.png" 
+                        src="/flags/simple/val.png" 
                         alt="Valencian flag" 
                         width={20} 
                         height={20} 
@@ -1193,7 +1323,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     >
                       <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
                         <Image 
-                          src="/flags/val.png" 
+                          src="/flags/simple/val.png" 
                           alt="Valencian flag" 
                           width={21} 
                           height={16} 
@@ -1243,18 +1373,46 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           <div className="grid md:grid-cols-2 gap-6 my-6">
             
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 animate-slide-up animation-delay-100">
-              <div className="flex items-center gap-3 mb-6">
-                <MapPin className="text-pink-500" />
-                <h3 className="text-xl font-bold">{dict.results.cultural_home}</h3>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <MapPin className="text-pink-500" />
+                  <h3 className="text-xl font-bold">{dict.results.cultural_home}</h3>
+                  <div className="group relative">
+                    <Info className="w-4 h-4 text-gray-400 hover:text-pink-400 cursor-help transition-colors" />
+                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                      Tu región ideal calculada comparando tus respuestas con los perfiles regionales del dataset NORPOL 2024 (3,015 personas).
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div className="h-64 w-full rounded-xl overflow-hidden mb-6 relative bg-slate-800/50" style={{isolation: 'isolate'}}>
-                 <MapComponent scores={results.matchScores} maxDistance={results.dynamicMaxDistance} />
+                <MapComponent scores={results.matchScores} maxDistance={results.dynamicMaxDistance} />
               </div>
               
               <div className="text-center py-4">
                 <p className="text-gray-400 text-sm mb-2">{dict.results.affinity}</p>
-                <div className="text-4xl font-bold text-pink-400 mb-6">{results.bestMatch}</div>
+                <div className="text-4xl font-bold text-pink-400 mb-2">{results.bestMatchDisplayName}</div>
+                
+                {/* Estadística de distancia cultural con la media nacional */}
+                <div className="mt-4 p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-lg">
+                  <div className="flex items-center justify-center gap-2 text-sm">
+                    <TrendingUp className="w-4 h-4 text-indigo-400" />
+                    <span className="text-gray-300">
+                      Similitud con la media: <span className="font-bold text-indigo-300">{results.similarityIndex}/10</span>
+                      <span className="text-xs text-gray-400 ml-2">({results.similarityCategory})</span>
+                    </span>
+                    <div className="group relative">
+                      <Info className="w-3.5 h-3.5 text-gray-400 hover:text-indigo-400 cursor-help transition-colors" />
+                      <div className="absolute left-0 top-6 w-72 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                        Índice de similitud cultural con el promedio español (1-10). Mide tu cercanía al perfil medio nacional en música, política, valores sociales, identidad, cultura, movilidad y gastronomía. Mayor valor = más cercano al español promedio.
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">
+                    <span className="font-semibold text-green-400">{results.regionsCloser}</span> de 17 regiones están más cerca de la media que tú
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -1263,6 +1421,11 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   // Escala de afinidad: 1 (mejor) a 19 (peor)
                   const affinityScore = i + 1;
                   
+                  // Usar directamente el ID de la región como nombre de archivo
+                  const basePath = process.env.PAGES_BASE_PATH || '';
+                  const flagPath = `${basePath}/flags/autonomias/${match.regionId}.jpg`;
+                  const displayName = match.displayName || match.region;
+                  
                   // Colores graduales en tonos de verde (verde oscuro → verde claro)
                   const getAffinityColor = (score: number) => {
                     if (score === 1) return 'from-green-700 to-green-600';
@@ -1270,14 +1433,6 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     if (score === 3) return 'from-green-500 to-green-400';
                     if (score === 4) return 'from-green-400 to-green-300';
                     return 'from-green-300 to-green-200';
-                  };
-                  
-                  const getTextColor = (score: number) => {
-                    if (score === 1) return 'text-green-400';
-                    if (score === 2) return 'text-green-300';
-                    if (score === 3) return 'text-lime-400';
-                    if (score === 4) return 'text-lime-300';
-                    return 'text-lime-200';
                   };
                   
                   const getBgColor = (score: number) => {
@@ -1290,18 +1445,29 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   
                   return (
                     <div 
-                      key={match.region} 
-                      className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
+                      key={match.regionId} 
+                      className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
                         i === 0 
                           ? `${getBgColor(affinityScore)} ring-2 ring-emerald-400/30` 
                           : 'bg-slate-800 border-slate-700'
                       }`}
                     >
                       <span className="flex items-center gap-3">
-                        <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-gradient-to-br ${getAffinityColor(affinityScore)} text-white shadow-lg`}>
-                          {affinityScore}
-                        </span>
-                        <span className={`font-medium ${i === 0 ? 'text-white' : ''}`}>{match.region}</span>
+                        <div className="relative">
+                          {/* Bandera de la autonomía */}
+                          <Image 
+                            src={flagPath}
+                            alt={`Bandera de ${displayName}`}
+                            width={40}
+                            height={40}
+                            className="rounded-lg object-cover border-2 border-slate-600 shadow-md"
+                          />
+                          {/* Badge con número de ranking */}
+                          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold bg-slate-900 text-white shadow-lg border-2 border-green-500">
+                            {affinityScore}
+                          </span>
+                        </div>
+                        <span className={`font-medium ${i === 0 ? 'text-white' : ''}`}>{displayName}</span>
                       </span>
                       <div className="flex items-center gap-2">
                         <div className="h-2 w-20 bg-slate-700 rounded-full overflow-hidden">
@@ -1318,9 +1484,15 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center animate-slide-up animation-delay-200">
-              <div className="flex items-center gap-3 mb-4 self-start w-full">
+              <div className="flex items-center gap-2 mb-4 self-start w-full">
                 <Activity className="text-cyan-500" />
                 <h3 className="text-xl font-bold">{dict.results.you_vs_spain}</h3>
+                <div className="group relative">
+                  <Info className="w-4 h-4 text-gray-400 hover:text-cyan-400 cursor-help transition-colors" />
+                  <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                    Comparativa de tus valores en dimensiones culturales clave versus la media nacional española.
+                  </div>
+                </div>
               </div>
               
               {/* Radar Chart con tooltips mejorados */}
@@ -1371,9 +1543,15 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               
               {/* Political Quadrant */}
               <div className="w-full">
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-2 mb-4">
                   <Users className="text-purple-500" />
                   <h3 className="text-lg font-bold">{dict.results.political_position}</h3>
+                  <div className="group relative">
+                    <Info className="w-4 h-4 text-gray-400 hover:text-purple-400 cursor-help transition-colors" />
+                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                      Tu posición en el espectro político bidimensional (económico y social) comparada con el promedio español.
+                    </div>
+                  </div>
                 </div>
                 
                 <div className="relative w-full aspect-square max-w-sm mx-auto bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-4">
