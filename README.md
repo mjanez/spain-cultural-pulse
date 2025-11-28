@@ -2,15 +2,13 @@
 [![ES](https://img.shields.io/badge/lang-ES-yellow.svg)](README.md)
 [![EN](https://img.shields.io/badge/lang-EN-blue.svg)](README.en.md)
 
-Webapp interactiva para explorar cultura, valores y política en España contemporánea a través de visualizaciones que se nutren de datos abiertos.
-
-- **[Ver Demo](https://mjanez.github.io/spain-cultural-pulse)**
+Aplicación web interactiva para explorar cultura, valores y política en España contemporánea a través de visualizaciones que se nutren de datos abiertos.
 
 - **[Ver Demo](https://mjanez.github.io/spain-cultural-pulse)**
 
 ## Sobre el proyecto
 
-Aplicación web desarrollada con Next.js que permite analizar y visualizar patrones culturales y sociales en España. Los datos provienen de una encuesta representativa de 3.000 adultos españoles realizada en 2024.
+Desarrollada con Next.js que permite analizar y visualizar patrones culturales y sociales en España. Los datos provienen de una encuesta representativa de 3.000 adultos españoles realizada en 2024.
 
 ## Tecnologías
 
@@ -26,10 +24,6 @@ Basado en el [Estudio sobre Normas Sociales en la Política, 2024](https://datos
 > **Muestra:** 3.000 adultos españoles (encuesta online, junio 2024)  
 > **Panel:** Netquest  
 > **Representatividad:** género, edad, educación, región y tamaño de municipio
-
-## Licencia
-
-Este proyecto está licenciado bajo [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). Puedes usar, compartir y adaptar este trabajo siempre que des la atribución apropiada.
 
 ## Qué analiza
 
@@ -59,3 +53,7 @@ El proyecto se despliega automáticamente en GitHub Pages mediante GitHub Action
 ```bash
 npm run build
 ```
+
+## Licencia
+
+Este proyecto está licenciado bajo [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). Puedes usar, compartir y adaptar este trabajo siempre que des la atribución apropiada.
