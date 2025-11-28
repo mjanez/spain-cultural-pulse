@@ -36,7 +36,7 @@
     "note": "All values normalized to 0-10 scale"
   },
   "regions": {
-    "Andalucía": {
+    "andalucia": {
       "count": 512,
       "music_classical": 3.38,
       "music_pop": 8.1,
@@ -65,9 +65,10 @@
       "identity_regional": 5.09,
       "religiosity": 4.15,
       "socioeconomic_education": 4.62,
-      "socioeconomic_income": 3.29
+      "socioeconomic_income": 3.29,
+      "displayName": "Andalucía"
     },
-    "Aragón": {
+    "aragon": {
       "count": 100,
       "music_classical": 4.8,
       "music_pop": 8.48,
@@ -96,9 +97,10 @@
       "identity_regional": 4.41,
       "religiosity": 4.21,
       "socioeconomic_education": 7.75,
-      "socioeconomic_income": 4.59
+      "socioeconomic_income": 4.59,
+      "displayName": "Aragón"
     },
-    "Principado de Asturias": {
+    "principado-asturias": {
       "count": 66,
       "music_classical": 4.39,
       "music_pop": 8.18,
@@ -127,9 +129,10 @@
       "identity_regional": 5.12,
       "religiosity": 4.45,
       "socioeconomic_education": 7.58,
-      "socioeconomic_income": 4.38
+      "socioeconomic_income": 4.38,
+      "displayName": "Principado de Asturias"
     },
-    "Islas Baleares": {
+    "illes-balears": {
       "count": 65,
       "music_classical": 6.56,
       "music_pop": 7.5,
@@ -158,9 +161,10 @@
       "identity_regional": 4.87,
       "religiosity": 5.2,
       "socioeconomic_education": 6.92,
-      "socioeconomic_income": 4.44
+      "socioeconomic_income": 4.44,
+      "displayName": "Islas Baleares"
     },
-    "Canarias": {
+    "canarias": {
       "count": 137,
       "music_classical": 4.67,
       "music_pop": 8.54,
@@ -189,9 +193,10 @@
       "identity_regional": 5.58,
       "religiosity": 4.46,
       "socioeconomic_education": 5.88,
-      "socioeconomic_income": 3.14
+      "socioeconomic_income": 3.14,
+      "displayName": "Canarias"
     },
-    "Cantabria": {
+    "cantabria": {
       "count": 35,
       "music_classical": 5.71,
       "music_pop": 7.71,
@@ -220,9 +225,10 @@
       "identity_regional": 4.62,
       "religiosity": 4.85,
       "socioeconomic_education": 7.29,
-      "socioeconomic_income": 4.14
+      "socioeconomic_income": 4.14,
+      "displayName": "Cantabria"
     },
-    "Castilla y León": {
+    "castilla-leon": {
       "count": 163,
       "music_classical": 4.14,
       "music_pop": 8.28,
@@ -251,9 +257,10 @@
       "identity_regional": 4.25,
       "religiosity": 3.94,
       "socioeconomic_education": 6.84,
-      "socioeconomic_income": 3.77
+      "socioeconomic_income": 3.77,
+      "displayName": "Castilla y León"
     },
-    "Castilla-La Mancha": {
+    "castilla-la-mancha": {
       "count": 138,
       "music_classical": 4.93,
       "music_pop": 8.76,
@@ -282,9 +289,10 @@
       "identity_regional": 3.82,
       "religiosity": 3.6,
       "socioeconomic_education": 6.12,
-      "socioeconomic_income": 4.15
+      "socioeconomic_income": 4.15,
+      "displayName": "Castilla-La Mancha"
     },
-    "Cataluña": {
+    "cataluna": {
       "count": 442,
       "music_classical": 4.91,
       "music_pop": 8.16,
@@ -313,9 +321,10 @@
       "identity_regional": 5.88,
       "religiosity": 5.5,
       "socioeconomic_education": 5.48,
-      "socioeconomic_income": 4.34
+      "socioeconomic_income": 4.34,
+      "displayName": "Cataluña"
     },
-    "Comunidad Valenciana": {
+    "comunitat-valenciana": {
       "count": 364,
       "music_classical": 4.53,
       "music_pop": 8.82,
@@ -344,9 +353,10 @@
       "identity_regional": 4.61,
       "religiosity": 4.57,
       "socioeconomic_education": 5.18,
-      "socioeconomic_income": 3.78
+      "socioeconomic_income": 3.78,
+      "displayName": "Comunidad Valenciana"
     },
-    "Extremadura": {
+    "extremadura": {
       "count": 68,
       "music_classical": 3.97,
       "music_pop": 8.82,
@@ -375,9 +385,10 @@
       "identity_regional": 4.61,
       "religiosity": 3.62,
       "socioeconomic_education": 6.32,
-      "socioeconomic_income": 3.04
+      "socioeconomic_income": 3.04,
+      "displayName": "Extremadura"
     },
-    "Galicia": {
+    "galicia": {
       "count": 195,
       "music_classical": 4.54,
       "music_pop": 8.29,
@@ -406,9 +417,10 @@
       "identity_regional": 5.26,
       "religiosity": 4.6,
       "socioeconomic_education": 7.31,
-      "socioeconomic_income": 3.93
+      "socioeconomic_income": 3.93,
+      "displayName": "Galicia"
     },
-    "Comunidad de Madrid": {
+    "comunidad-madrid": {
       "count": 418,
       "music_classical": 4.44,
       "music_pop": 8.49,
@@ -437,9 +449,10 @@
       "identity_regional": 4.49,
       "religiosity": 4.66,
       "socioeconomic_education": 5.97,
-      "socioeconomic_income": 4.34
+      "socioeconomic_income": 4.34,
+      "displayName": "Comunidad de Madrid"
     },
-    "Región de Murcia": {
+    "region-murcia": {
       "count": 95,
       "music_classical": 4.68,
       "music_pop": 7.98,
@@ -468,9 +481,10 @@
       "identity_regional": 4.47,
       "religiosity": 4.9,
       "socioeconomic_education": 6.21,
-      "socioeconomic_income": 3.29
+      "socioeconomic_income": 3.29,
+      "displayName": "Región de Murcia"
     },
-    "Comunidad Foral de Navarra": {
+    "comunidad-foral-navarra": {
       "count": 33,
       "music_classical": 5.31,
       "music_pop": 6.56,
@@ -499,9 +513,10 @@
       "identity_regional": 5.89,
       "religiosity": 3.69,
       "socioeconomic_education": 6.82,
-      "socioeconomic_income": 3.83
+      "socioeconomic_income": 3.83,
+      "displayName": "Comunidad Foral de Navarra"
     },
-    "País Vasco": {
+    "pais-vasco": {
       "count": 153,
       "music_classical": 4.14,
       "music_pop": 8.43,
@@ -530,9 +545,10 @@
       "identity_regional": 5.94,
       "religiosity": 5.47,
       "socioeconomic_education": 6.37,
-      "socioeconomic_income": 4.41
+      "socioeconomic_income": 4.41,
+      "displayName": "País Vasco"
     },
-    "La Rioja": {
+    "la-rioja": {
       "count": 31,
       "music_classical": 5.48,
       "music_pop": 8.71,
@@ -561,7 +577,8 @@
       "identity_regional": 4.73,
       "religiosity": 4.13,
       "socioeconomic_education": 6.61,
-      "socioeconomic_income": 3.97
+      "socioeconomic_income": 3.97,
+      "displayName": "La Rioja"
     }
   },
   "national": {
