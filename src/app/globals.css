@@ -65,3 +65,17 @@
     animation-fill-mode: backwards;
   }
 }
+
+/* Estilos personalizados para tooltips de Leaflet */
+.custom-tooltip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(100, 116, 139, 0.5) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+  color: white !important;
+}
+
+.custom-tooltip::before {
+  border-top-color: rgba(15, 23, 42, 0.95) !important;
+}
