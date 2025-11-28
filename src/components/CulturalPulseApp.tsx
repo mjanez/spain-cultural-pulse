@@ -25,7 +25,10 @@ import {
   Languages,
   Download,
   Link as LinkIcon,
-  Github
+  Github,
+  Check,
+  X,
+  TrendingUp
 } from 'lucide-react';
 import { 
   Radar, 
@@ -39,6 +42,7 @@ import {
 } from 'recharts';
 import regionalData from '@/data/regional_profiles_complete.json';
 import tribesData from '@/data/cultural_tribes.json';
+import { calculateTopParties } from '@/lib/partyCalculator';
 
 const MapComponent = dynamic(() => import('./MapComponent'), { 
   ssr: false,
@@ -119,9 +123,11 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
+  const [toast, setToast] = useState<{show: boolean, message: string, type: 'success' | 'error'}>({show: false, message: '', type: 'success'});
+  const [copied, setCopied] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const shareDropdownRef = useRef<HTMLDivElement>(null);
-  const resultsRef = useRef<HTMLDivElement>(null);
   
   const currentLang = lang || 'es';
   
@@ -188,52 +194,55 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Funciones para compartir
-  const generateShareUrl = () => {
-    const encoded = encodeAnswers(answers);
-    const baseUrl = window.location.origin + window.location.pathname;
-    return `${baseUrl}?a=${encoded}`;
+  // Auto-hide toast
+  useEffect(() => {
+    if (toast.show) {
+      const timer = setTimeout(() => {
+        setToast({...toast, show: false});
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast.show]);
+
+  // Función para mostrar toast
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({show: true, message, type});
   };
 
+  // Función para compartir
   const copyLinkToClipboard = async () => {
     try {
-      const shareUrl = generateShareUrl();
+      const encoded = encodeAnswers(answers);
+      const baseUrl = window.location.origin + window.location.pathname;
+      const shareUrl = `${baseUrl}?a=${encoded}`;
       await navigator.clipboard.writeText(shareUrl);
-      alert(dict.results.link_copied);
-      setShareMenuOpen(false);
+      setCopied(true);
+      showToast(dict.results.link_copied || '¡Enlace copiado!', 'success');
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      alert(dict.results.share_failed);
+      showToast(dict.results.share_failed || 'Error al copiar', 'error');
     }
   };
 
-  const downloadResultsImage = async () => {
-    if (!resultsRef.current) return;
-    
-    try {
-      const canvas = await html2canvas(resultsRef.current, {
-        backgroundColor: '#020617',
-        scale: 2,
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        foreignObjectRendering: true,
-        scrollY: -window.scrollY,
-        scrollX: -window.scrollX,
-        windowWidth: resultsRef.current.scrollWidth,
-        windowHeight: resultsRef.current.scrollHeight
-      });
-      
-      const link = document.createElement('a');
-      link.download = `cultural-pulse-${Date.now()}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      
-      alert(dict.results.image_downloaded);
-      setShareMenuOpen(false);
-    } catch (err) {
-      console.error('Error generating image:', err);
-      alert(dict.results.share_failed);
-    }
+  // Funciones para compartir en redes sociales
+  const shareToTwitter = () => {
+    const encoded = encodeAnswers(answers);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?a=${encoded}`;
+    const text = `${dict.results.share_twitter || '¡Descubre tu perfil cultural en España!'} 🇪🇸`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const shareToFacebook = () => {
+    const encoded = encodeAnswers(answers);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?a=${encoded}`;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const shareToWhatsApp = () => {
+    const encoded = encodeAnswers(answers);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?a=${encoded}`;
+    const text = `${dict.results.share_whatsapp || '¡Mira mi perfil cultural en España!'} 🇪🇸`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + shareUrl)}`, '_blank');
   };
 
   // Language Selector Component
@@ -249,7 +258,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           {currentLang === 'val' ? (
             <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
               <Image 
-                src="/flags/val.png" 
+                src="/flags/simple/val.png" 
                 alt="Valencian flag" 
                 width={16} 
                 height={16} 
@@ -342,7 +351,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           >
             <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
               <Image 
-                src="/flags/val.png" 
+                src="/flags/simple/val.png" 
                 alt="Valencian flag" 
                 width={21} 
                 height={16} 
@@ -669,7 +678,15 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
       if (diff < bestMatch.score) {
         bestMatch = { region, score: diff };
       }
-      return { region, diff };
+      
+      // Incluir regionId y displayName del perfil
+      const regionData = REGIONAL_PROFILES[region] as any;
+      return { 
+        region, 
+        regionId: region, 
+        displayName: regionData?.displayName || region,
+        diff 
+      };
     }).sort((a, b) => a.diff - b.diff);
 
     // Calcular maxDistance dinámico basado en datos reales
@@ -686,32 +703,50 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     })));
     console.log('Dynamic maxDistance:', dynamicMaxDistance.toFixed(2));
 
-    // Clasificación de tribu basada en distancia a arquetipos (15 dimensiones críticas)
+    // Clasificación de tribu usando todas las 28 dimensiones con pesos balanceados
     let tribeId = 'middle_class_moderate';
     let minTribeDistance = Infinity;
 
     Object.entries(TRIBES).forEach(([id, tribeProfile]) => {
       const tribeDiffs = [
-        // Dimensiones políticas (peso x3)
-        Math.pow(userProfile.politics_leftright - tribeProfile.politics_leftright, 2) * 3,
-        Math.pow(userProfile.politics_equality - tribeProfile.politics_equality, 2) * 3,
-        Math.pow(userProfile.politics_environment - tribeProfile.politics_environment, 2) * 2,
-        // Valores morales (peso x3)
-        Math.pow(userProfile.values_authority - tribeProfile.values_authority, 2) * 3,
-        Math.pow(userProfile.values_purity - tribeProfile.values_purity, 2) * 2,
-        Math.pow(userProfile.values_care - tribeProfile.values_care, 2) * 2,
-        // Temas sociales (peso x2.5)
-        Math.pow(userProfile.social_lgbt - tribeProfile.social_lgbt, 2) * 2.5,
-        Math.pow(userProfile.social_abortion - tribeProfile.social_abortion, 2) * 2.5,
-        Math.pow(userProfile.social_immigration - tribeProfile.social_immigration, 2) * 2,
-        // Identidad y religión (peso x2)
-        Math.pow(userProfile.identity_spanish - tribeProfile.identity_spanish, 2) * 2,
+        // Música (5 dimensiones, peso x1.2 cada una)
+        Math.pow(userProfile.music_rock - tribeProfile.music_rock, 2) * 1.2,
+        Math.pow(userProfile.music_pop - tribeProfile.music_pop, 2) * 1.2,
+        Math.pow(userProfile.music_reggaeton - tribeProfile.music_reggaeton, 2) * 1.2,
+        Math.pow(userProfile.music_classical - tribeProfile.music_classical, 2) * 1.2,
+        Math.pow(userProfile.music_traditional - tribeProfile.music_traditional, 2) * 1.2,
+        // Política (3 dimensiones, peso x4)
+        Math.pow(userProfile.politics_leftright - tribeProfile.politics_leftright, 2) * 4,
+        Math.pow(userProfile.politics_environment - tribeProfile.politics_environment, 2) * 4,
+        Math.pow(userProfile.politics_equality - tribeProfile.politics_equality, 2) * 4,
+        // Valores morales (3 dimensiones, peso x3.5)
+        Math.pow(userProfile.values_care - tribeProfile.values_care, 2) * 3.5,
+        Math.pow(userProfile.values_authority - tribeProfile.values_authority, 2) * 3.5,
+        Math.pow(userProfile.values_purity - tribeProfile.values_purity, 2) * 3.5,
+        // Temas sociales (4 dimensiones, peso x3)
+        Math.pow(userProfile.social_immigration - tribeProfile.social_immigration, 2) * 3,
+        Math.pow(userProfile.social_lgbt - tribeProfile.social_lgbt, 2) * 3,
+        Math.pow(userProfile.social_abortion - tribeProfile.social_abortion, 2) * 3,
+        Math.pow(userProfile.social_feminism - tribeProfile.social_feminism, 2) * 3,
+        // Cultura (3 dimensiones, peso x1.5)
+        Math.pow(userProfile.culture_reading - tribeProfile.culture_reading, 2) * 1.5,
+        Math.pow(userProfile.culture_sports - tribeProfile.culture_sports, 2) * 1.5,
+        Math.pow(userProfile.culture_museums - tribeProfile.culture_museums, 2) * 1.5,
+        // Identidad (2 dimensiones, peso x2.5)
+        Math.pow(userProfile.identity_spanish - tribeProfile.identity_spanish, 2) * 2.5,
+        Math.pow(userProfile.identity_regional - tribeProfile.identity_regional, 2) * 2.5,
+        // Religión (peso x2)
         Math.pow(userProfile.religiosity - tribeProfile.religiosity, 2) * 2,
-        // Cultura y estilo de vida (peso x1)
-        Math.pow(userProfile.music_traditional - tribeProfile.music_traditional, 2),
-        Math.pow(userProfile.culture_reading - tribeProfile.culture_reading, 2),
-        Math.pow(userProfile.mobility_car - tribeProfile.mobility_car, 2),
-        Math.pow(userProfile.food_adventurous - tribeProfile.food_adventurous, 2),
+        // Gastronomía (2 dimensiones, peso x0.8)
+        Math.pow(userProfile.food_adventurous - tribeProfile.food_adventurous, 2) * 0.8,
+        Math.pow(userProfile.food_social - tribeProfile.food_social, 2) * 0.8,
+        // Movilidad (3 dimensiones, peso x1.2)
+        Math.pow(userProfile.mobility_car - tribeProfile.mobility_car, 2) * 1.2,
+        Math.pow(userProfile.mobility_public - tribeProfile.mobility_public, 2) * 1.2,
+        Math.pow(userProfile.mobility_active - tribeProfile.mobility_active, 2) * 1.2,
+        // Socioeconómico (2 dimensiones, peso x0.5)
+        Math.pow(userProfile.socioeconomic_education - tribeProfile.socioeconomic_education, 2) * 0.5,
+        Math.pow(userProfile.socioeconomic_income - tribeProfile.socioeconomic_income, 2) * 0.5,
       ];
       
       const tribeDist = Math.sqrt(tribeDiffs.reduce((sum, val) => sum + val, 0));
@@ -726,14 +761,130 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     const tribeName = dict.tribes?.[tribeId]?.name || tribeId;
     const tribeDescription = dict.tribes?.[tribeId]?.description || '';
 
+    // Calcular distancia cultural respecto a la media nacional española
+    // Comparamos tu perfil con el perfil promedio de España (NATIONAL_AVG)
+    // Usamos los mismos pesos que para calcular las regiones
+    const weights = {
+      music: 1.0,
+      politics: 4.0,
+      food: 0.8,
+      mobility: 1.2,
+      values: 3.5,
+      social: 3.0,
+      culture: 1.5,
+      identity: 2.5,
+      religion: 2.0,
+      socioeco: 0.3
+    };
+
+    const nationalDiffs = [
+      // Música (5 dimensiones)
+      Math.abs(userProfile.music_rock - NATIONAL_AVG.music_rock) / 10 * weights.music,
+      Math.abs(userProfile.music_pop - NATIONAL_AVG.music_pop) / 10 * weights.music,
+      Math.abs(userProfile.music_reggaeton - NATIONAL_AVG.music_reggaeton) / 10 * weights.music,
+      Math.abs(userProfile.music_classical - NATIONAL_AVG.music_classical) / 10 * weights.music,
+      Math.abs(userProfile.music_traditional - NATIONAL_AVG.music_traditional) / 10 * weights.music,
+      // Política (3 dimensiones)
+      Math.abs(userProfile.politics_leftright - NATIONAL_AVG.politics_leftright) / 10 * weights.politics,
+      Math.abs(userProfile.politics_environment - NATIONAL_AVG.politics_environment) / 10 * weights.politics,
+      Math.abs(userProfile.politics_equality - NATIONAL_AVG.politics_equality) / 10 * weights.politics,
+      // Valores (3 dimensiones)
+      Math.abs(userProfile.values_care - NATIONAL_AVG.values_care) / 10 * weights.values,
+      Math.abs(userProfile.values_authority - NATIONAL_AVG.values_authority) / 10 * weights.values,
+      Math.abs(userProfile.values_purity - NATIONAL_AVG.values_purity) / 10 * weights.values,
+      // Social (4 dimensiones)
+      Math.abs(userProfile.social_immigration - NATIONAL_AVG.social_immigration) / 10 * weights.social,
+      Math.abs(userProfile.social_lgbt - NATIONAL_AVG.social_lgbt) / 10 * weights.social,
+      Math.abs(userProfile.social_abortion - NATIONAL_AVG.social_abortion) / 10 * weights.social,
+      Math.abs(userProfile.social_feminism - NATIONAL_AVG.social_feminism) / 10 * weights.social,
+      // Cultura (3 dimensiones)
+      Math.abs(userProfile.culture_reading - NATIONAL_AVG.culture_reading) / 10 * weights.culture,
+      Math.abs(userProfile.culture_sports - NATIONAL_AVG.culture_sports) / 10 * weights.culture,
+      Math.abs(userProfile.culture_museums - NATIONAL_AVG.culture_museums) / 10 * weights.culture,
+      // Identidad (2 dimensiones)
+      Math.abs(userProfile.identity_spanish - NATIONAL_AVG.identity_spanish) / 10 * weights.identity,
+      Math.abs(userProfile.identity_regional - NATIONAL_AVG.identity_regional) / 10 * weights.identity,
+      // Otros
+      Math.abs(userProfile.religiosity - NATIONAL_AVG.religiosity) / 10 * weights.religion,
+      Math.abs(userProfile.food_adventurous - NATIONAL_AVG.food_adventurous) / 10 * weights.food,
+      Math.abs(userProfile.food_social - NATIONAL_AVG.food_social) / 10 * weights.food,
+      Math.abs(userProfile.mobility_car - NATIONAL_AVG.mobility_car) / 10 * weights.mobility,
+      Math.abs(userProfile.mobility_public - NATIONAL_AVG.mobility_public) / 10 * weights.mobility,
+      Math.abs(userProfile.mobility_active - NATIONAL_AVG.mobility_active) / 10 * weights.mobility,
+      Math.abs(userProfile.socioeconomic_education - NATIONAL_AVG.socioeconomic_education) / 10 * weights.socioeco,
+      Math.abs(userProfile.socioeconomic_income - NATIONAL_AVG.socioeconomic_income) / 10 * weights.socioeco,
+    ];
+    
+    // Calcular similitud con la media usando las MISMAS dimensiones del radar "Tu vs España"
+    // Dimensiones agregadas (igual que el radar chart)
+    const userMusicAvg = (userProfile.music_rock + userProfile.music_pop + userProfile.music_reggaeton + userProfile.music_classical + userProfile.music_traditional) / 5;
+    const nationalMusicAvg = (NATIONAL_AVG.music_rock + NATIONAL_AVG.music_pop + NATIONAL_AVG.music_reggaeton + NATIONAL_AVG.music_classical + NATIONAL_AVG.music_traditional) / 5;
+    
+    const userSocialAvg = (userProfile.social_lgbt + userProfile.social_immigration + userProfile.social_abortion + userProfile.social_feminism) / 4;
+    const nationalSocialAvg = (NATIONAL_AVG.social_lgbt + NATIONAL_AVG.social_immigration + NATIONAL_AVG.social_abortion + NATIONAL_AVG.social_feminism) / 4;
+    
+    const userIdentityAvg = (userProfile.identity_spanish + userProfile.identity_regional) / 2;
+    const nationalIdentityAvg = (NATIONAL_AVG.identity_spanish + NATIONAL_AVG.identity_regional) / 2;
+    
+    const userCultureAvg = (userProfile.culture_reading + userProfile.culture_sports + userProfile.culture_museums) / 3;
+    const nationalCultureAvg = (NATIONAL_AVG.culture_reading + NATIONAL_AVG.culture_sports + NATIONAL_AVG.culture_museums) / 3;
+    
+    const userMobilityAvg = (userProfile.mobility_public + userProfile.mobility_car + userProfile.mobility_active) / 3;
+    const nationalMobilityAvg = (NATIONAL_AVG.mobility_public + NATIONAL_AVG.mobility_car + NATIONAL_AVG.mobility_active) / 3;
+    
+    // Diferencias en dimensiones del radar (0-10)
+    const radarDiffs = [
+      Math.abs(userMusicAvg - nationalMusicAvg),
+      Math.abs(userProfile.politics_leftright - NATIONAL_AVG.politics_leftright),
+      Math.abs(userSocialAvg - nationalSocialAvg),
+      Math.abs(userIdentityAvg - nationalIdentityAvg),
+      Math.abs(userCultureAvg - nationalCultureAvg),
+      Math.abs(userMobilityAvg - nationalMobilityAvg),
+      Math.abs(userProfile.food_adventurous - NATIONAL_AVG.food_adventurous)
+    ];
+    
+    // Distancia promedio en las dimensiones del radar
+    const avgRadarDiff = radarDiffs.reduce((sum, diff) => sum + diff, 0) / radarDiffs.length;
+    
+    // Calcular índice de similitud (inversamente proporcional a la diferencia)
+    // Si avgRadarDiff es 0 → 10/10, si es 5+ (muy diferente) → 1/10
+    const similarityIndex = Math.max(1, Math.min(10, Math.round(10 - (avgRadarDiff / 5) * 9)));
+    
+    // Calcular cuántas dimensiones están cerca (diff < 1.0)
+    const dimensionsClose = radarDiffs.filter(diff => diff < 1.0).length;
+    const regionsCloser = 7 - dimensionsClose; // Invertir: si todas cercanas → 0 regiones más cercanas
+    
+    // Categoría descriptiva basada en el índice
+    const getSimilarityCategory = (index: number): string => {
+      if (index >= 9) return 'Muy cercano';
+      if (index >= 7) return 'Cercano';
+      if (index >= 5) return 'Moderado';
+      if (index >= 3) return 'Alejado';
+      return 'Muy alejado';
+    };
+    const similarityCategory = getSimilarityCategory(similarityIndex);
+    
+    // Obtener displayName del mejor match
+    const bestMatchData = REGIONAL_PROFILES[matchScores[0].region] as any;
+    const bestMatchDisplayName = bestMatchData?.displayName || matchScores[0].region;
+
+    // Calcular los 3 partidos políticos más afines usando el módulo externo
+    const topParties = calculateTopParties(userProfile, matchScores);
+
     return {
       userProfile,
       bestMatch: matchScores[0].region,
+      bestMatchDisplayName,
       matchScores,
       tribeId,
       tribeName,
       tribeDescription,
-      dynamicMaxDistance
+      dynamicMaxDistance,
+      similarityIndex,
+      similarityCategory,
+      regionsCloser,
+      avgRadarDiff,
+      topParties
     };
   }, [view, answers, dict]);
 
@@ -846,6 +997,14 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
 
   if (view === 'quiz') {
     const q = QUIZ_QUESTIONS[currentQuestionIndex];
+    
+    // Validación: si no hay pregunta, volver a home
+    if (!q) {
+      setView('home');
+      setCurrentQuestionIndex(0);
+      return null;
+    }
+    
     const progress = ((currentQuestionIndex) / QUIZ_QUESTIONS.length) * 100;
 
     return (
@@ -983,66 +1142,248 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
     const politicalY = results.userProfile.values_authority; // 0=libertario, 10=autoritario
 
     return (
-      <div className="min-h-screen bg-slate-950 text-white p-4 md:p-8 font-sans">
-        <LanguageSelector />
-        
-        <div className="max-w-4xl mx-auto space-y-6">
-          
-          <div className="flex justify-between items-center mb-8">
-            <button onClick={() => {
-              sessionStorage.clear();
-              window.location.reload();
-            }} className="text-gray-400 hover:text-white flex items-center gap-2">
-              <RefreshCw size={18} /> {dict.results.restart}
-            </button>
-            
-            {/* GitHub Link - centered */}
-            <a 
-              href={process.env.GITHUB_REPO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
-              aria-label={dict.home.github_link}
-            >
-              <Github className="w-4 h-4" />
-              <span>{dict.home.github_link}</span>
-            </a>
-            
-            {/* Share Menu */}
-            <div className="relative" ref={shareDropdownRef}>
-              <button 
-                onClick={() => setShareMenuOpen(!shareMenuOpen)}
-                className="text-pink-400 hover:text-pink-300 flex items-center gap-2 font-bold"
-              >
-                <Share2 size={18} /> {dict.results.share}
-              </button>
-              
-              {shareMenuOpen && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md z-50">
-                  <button
-                    onClick={copyLinkToClipboard}
-                    className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-pink-300 transition-all duration-200"
-                  >
-                    <LinkIcon className="w-4 h-4" />
-                    <span className="text-sm">{dict.results.copy_link}</span>
-                  </button>
-                  <button
-                    onClick={downloadResultsImage}
-                    className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-pink-300 transition-all duration-200"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span className="text-sm">{dict.results.download_image}</span>
-                  </button>
-                </div>
+      <div className="min-h-screen bg-slate-950 text-white font-sans">
+        {/* Toast Notification */}
+        {toast.show && (
+          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[60] animate-slide-down">
+            <div className={`flex items-center gap-3 px-6 py-3 rounded-xl shadow-2xl backdrop-blur-md border ${
+              toast.type === 'success' 
+                ? 'bg-green-500/90 border-green-400/50' 
+                : 'bg-red-500/90 border-red-400/50'
+            }`}>
+              {toast.type === 'success' ? (
+                <Check className="w-5 h-5 text-white" />
+              ) : (
+                <X className="w-5 h-5 text-white" />
               )}
+              <span className="text-white font-semibold">{toast.message}</span>
             </div>
           </div>
+        )}
 
-          {/* Contenedor con ref para captura de imagen */}
-          <div ref={resultsRef}>
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-3xl p-8 text-center shadow-2xl shadow-indigo-900/50 relative overflow-hidden">
+        {/* Navbar Sticky */}
+        <nav className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-between gap-2">
+              {/* Botón Reiniciar */}
+              <button 
+                onClick={() => {
+                  sessionStorage.clear();
+                  window.location.reload();
+                }} 
+                className="text-gray-400 hover:text-white flex items-center gap-2 transition-colors"
+                title={dict.results?.restart || 'Reiniciar'}
+              >
+                <RefreshCw size={18} />
+                <span className="hidden md:inline text-sm">{dict.results?.restart || 'Reiniciar'}</span>
+              </button>
+              
+              {/* Botón GitHub */}
+              <a 
+                href={process.env.GITHUB_REPO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white flex items-center gap-2 transition-colors"
+                aria-label={dict.home?.github_link || 'GitHub'}
+                title={dict.home?.github_link || 'Ver código fuente'}
+              >
+                <Github className="w-4 h-4" />
+                <span className="hidden md:inline text-sm">{dict.home?.github_link || 'GitHub'}</span>
+              </a>
+              
+              {/* Botón Compartir con menú desplegable */}
+              <div className="relative" ref={shareDropdownRef}>
+                <button 
+                  onClick={() => setShareMenuOpen(!shareMenuOpen)}
+                  className="text-pink-400 hover:text-pink-300 flex items-center gap-2 font-semibold transition-colors"
+                >
+                  {copied ? <Check size={18} className="text-green-400" /> : <Share2 size={18} />}
+                  <span className="hidden md:inline text-sm">{dict.results?.share || 'Compartir'}</span>
+                </button>
+                
+                {shareMenuOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md">
+                    <button
+                      onClick={copyLinkToClipboard}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-pink-300 transition-all duration-200"
+                    >
+                      <LinkIcon className="w-4 h-4" />
+                      <span className="text-sm">{dict.results?.copy_link || 'Copiar enlace'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        shareToTwitter();
+                        setShareMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-blue-400 transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span className="text-sm">Twitter</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        shareToFacebook();
+                        setShareMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-blue-500 transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      <span className="text-sm">Facebook</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        shareToWhatsApp();
+                        setShareMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left flex items-center gap-3 text-white hover:bg-slate-700/50 hover:text-green-400 transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                      <span className="text-sm">WhatsApp</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+              
+              {/* Selector de idioma - solo bandera en móvil */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                  className="flex items-center gap-1 md:gap-2 px-2 py-1.5 md:px-3 md:py-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors border border-slate-700/50"
+                  aria-label={dict.language?.select || 'Language'}
+                  title={dict.language?.select || 'Seleccionar idioma'}
+                >
+                  {currentLang === 'val' ? (
+                    <div className="w-5 h-5 overflow-hidden rounded-sm flex-shrink-0">
+                      <Image 
+                        src="/flags/simple/val.png" 
+                        alt="Valencian flag" 
+                        width={20} 
+                        height={20} 
+                      />
+                    </div>
+                  ) : (
+                    <span className={`fi fi-${
+                      currentLang === 'es' ? 'es' : 
+                      currentLang === 'en' ? 'gb' : 
+                      currentLang === 'eu' ? 'es-pv' : 
+                      currentLang === 'ca' ? 'es-ct' : 
+                      currentLang === 'gl' ? 'es-ga' : 'es'
+                    } fis text-lg`}></span>
+                  )}
+                  <span className="hidden md:inline text-xs text-gray-300">
+                    {currentLang.toUpperCase()}
+                  </span>
+                </button>
+                
+                {langDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-40 md:w-44 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-600/50 shadow-2xl overflow-hidden backdrop-blur-md z-50">
+                    <button
+                      onClick={() => {
+                        switchLanguage('es');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'es' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es fis"></span>
+                      <span className="text-sm">{dict.language?.es || 'Español'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('en');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'en' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-gb fis"></span>
+                      <span className="text-sm">{dict.language?.en || 'English'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('eu');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'eu' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es-pv fis"></span>
+                      <span className="text-sm">{dict.language?.eu || 'Euskara'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('ca');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'ca' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es-ct fis"></span>
+                      <span className="text-sm">{dict.language?.ca || 'Català'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('val');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'val' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
+                        <Image 
+                          src="/flags/simple/val.png" 
+                          alt="Valencian flag" 
+                          width={21} 
+                          height={16} 
+                          className="object-cover object-left" 
+                          style={{marginLeft: 0}}
+                        />
+                      </div>
+                      <span className="text-sm">Valencià</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        switchLanguage('gl');
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all duration-200 ${
+                        currentLang === 'gl' 
+                          ? 'bg-pink-500/20 text-pink-300 font-semibold' 
+                          : 'text-white hover:bg-slate-700/50 hover:text-pink-300'
+                      }`}
+                    >
+                      <span className="fi fi-es-ga fis"></span>
+                      <span className="text-sm">{dict.language?.gl || 'Galego'}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        {/* Contenido principal con padding-top para navbar */}
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-6 md:py-8">
+          {/* Sección de resultados con animaciones */}
+          <div className="animate-fade-in">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-3xl p-8 text-center shadow-2xl shadow-indigo-900/50 relative overflow-hidden animate-slide-up">
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-              <Trophy className="w-12 h-12 mx-auto text-yellow-300 mb-4" />
+              <Trophy className="w-12 h-12 mx-auto text-yellow-300 mb-4 animate-bounce" />
               <h2 className="text-lg uppercase tracking-widest opacity-80 mb-2">{dict.results.your_tribe}</h2>
               <h1 className="text-4xl md:text-6xl font-black mb-4 text-white drop-shadow-lg">
                 {results.tribeName}
@@ -1054,19 +1395,47 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
 
           <div className="grid md:grid-cols-2 gap-6 my-6">
             
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <MapPin className="text-pink-500" />
-                <h3 className="text-xl font-bold">{dict.results.cultural_home}</h3>
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 animate-slide-up animation-delay-100">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <MapPin className="text-pink-500" />
+                  <h3 className="text-xl font-bold">{dict.results.cultural_home}</h3>
+                  <div className="group relative">
+                    <Info className="w-4 h-4 text-gray-400 hover:text-pink-400 cursor-help transition-colors" />
+                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                      Tu región ideal calculada comparando tus respuestas con los perfiles regionales del dataset NORPOL 2024 (3,015 personas).
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div className="h-64 w-full rounded-xl overflow-hidden mb-6 relative bg-slate-800/50" style={{isolation: 'isolate'}}>
-                 <MapComponent scores={results.matchScores} maxDistance={results.dynamicMaxDistance} />
+                <MapComponent scores={results.matchScores} maxDistance={results.dynamicMaxDistance} />
               </div>
               
               <div className="text-center py-4">
                 <p className="text-gray-400 text-sm mb-2">{dict.results.affinity}</p>
-                <div className="text-4xl font-bold text-pink-400 mb-6">{results.bestMatch}</div>
+                <div className="text-4xl font-bold text-pink-400 mb-2">{results.bestMatchDisplayName}</div>
+                
+                {/* Estadística de distancia cultural con la media nacional */}
+                <div className="mt-4 p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-lg">
+                  <div className="flex items-center justify-center gap-2 text-sm">
+                    <TrendingUp className="w-4 h-4 text-indigo-400" />
+                    <span className="text-gray-300">
+                      Similitud con la media: <span className="font-bold text-indigo-300">{results.similarityIndex}/10</span>
+                      <span className="text-xs text-gray-400 ml-2">({results.similarityCategory})</span>
+                    </span>
+                    <div className="group relative">
+                      <Info className="w-3.5 h-3.5 text-gray-400 hover:text-indigo-400 cursor-help transition-colors" />
+                      <div className="absolute left-0 top-6 w-72 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                        Índice de similitud cultural con el promedio español (1-10). Mide tu cercanía al perfil medio nacional en música, política, valores sociales, identidad, cultura, movilidad y gastronomía. Mayor valor = más cercano al español promedio.
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">
+                    <span className="font-semibold text-green-400">{results.regionsCloser}</span> de 17 regiones están más cerca de la media que tú
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -1075,6 +1444,11 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   // Escala de afinidad: 1 (mejor) a 19 (peor)
                   const affinityScore = i + 1;
                   
+                  // Usar directamente el ID de la región como nombre de archivo
+                  const basePath = process.env.PAGES_BASE_PATH || '';
+                  const flagPath = `${basePath}/flags/autonomias/${match.regionId}.jpg`;
+                  const displayName = match.displayName || match.region;
+                  
                   // Colores graduales en tonos de verde (verde oscuro → verde claro)
                   const getAffinityColor = (score: number) => {
                     if (score === 1) return 'from-green-700 to-green-600';
@@ -1082,14 +1456,6 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     if (score === 3) return 'from-green-500 to-green-400';
                     if (score === 4) return 'from-green-400 to-green-300';
                     return 'from-green-300 to-green-200';
-                  };
-                  
-                  const getTextColor = (score: number) => {
-                    if (score === 1) return 'text-green-400';
-                    if (score === 2) return 'text-green-300';
-                    if (score === 3) return 'text-lime-400';
-                    if (score === 4) return 'text-lime-300';
-                    return 'text-lime-200';
                   };
                   
                   const getBgColor = (score: number) => {
@@ -1102,18 +1468,29 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   
                   return (
                     <div 
-                      key={match.region} 
-                      className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
+                      key={match.regionId} 
+                      className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
                         i === 0 
                           ? `${getBgColor(affinityScore)} ring-2 ring-emerald-400/30` 
                           : 'bg-slate-800 border-slate-700'
                       }`}
                     >
                       <span className="flex items-center gap-3">
-                        <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-gradient-to-br ${getAffinityColor(affinityScore)} text-white shadow-lg`}>
-                          {affinityScore}
-                        </span>
-                        <span className={`font-medium ${i === 0 ? 'text-white' : ''}`}>{match.region}</span>
+                        <div className="relative">
+                          {/* Bandera de la autonomía */}
+                          <Image 
+                            src={flagPath}
+                            alt={`Bandera de ${displayName}`}
+                            width={40}
+                            height={40}
+                            className="rounded-lg object-cover border-2 border-slate-600 shadow-md"
+                          />
+                          {/* Badge con número de ranking */}
+                          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold bg-slate-900 text-white shadow-lg border-2 border-green-500">
+                            {affinityScore}
+                          </span>
+                        </div>
+                        <span className={`font-medium ${i === 0 ? 'text-white' : ''}`}>{displayName}</span>
                       </span>
                       <div className="flex items-center gap-2">
                         <div className="h-2 w-20 bg-slate-700 rounded-full overflow-hidden">
@@ -1127,21 +1504,71 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   );
                 })}
               </div>
+
+              {/* Identidad: Española ← → Regional */}
+              <div className="mt-6 pt-6 border-t border-slate-700">
+                <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">{dict.results.identity_label || 'Tu Identidad'}</p>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded border border-slate-600 overflow-hidden shadow-sm flex-shrink-0">
+                        <Image 
+                          src="/flags/españa.jpg"
+                          alt="España"
+                          width={20}
+                          height={20}
+                          className="object-contain w-full h-full"
+                        />
+                      </div>
+                      <span className="font-medium text-red-400">{results.userProfile.identity_spanish.toFixed(1)}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-medium text-green-400">{results.userProfile.identity_regional.toFixed(1)}</span>
+                      <div className="w-5 h-5 rounded border border-slate-600 overflow-hidden shadow-sm flex-shrink-0">
+                        <Image 
+                          src={`${process.env.PAGES_BASE_PATH || ''}/flags/autonomias/${results.matchScores[0].regionId}.jpg`}
+                          alt={results.matchScores[0].displayName || results.matchScores[0].region}
+                          width={20}
+                          height={20}
+                          className="object-contain w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative h-3 bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-600 to-yellow-500"
+                      style={{ width: `${(results.userProfile.identity_spanish / (results.userProfile.identity_spanish + results.userProfile.identity_regional)) * 100}%` }}
+                    ></div>
+                    <div 
+                      className="absolute inset-y-0 right-0 bg-gradient-to-l from-green-600 to-emerald-500"
+                      style={{ width: `${(results.userProfile.identity_regional / (results.userProfile.identity_spanish + results.userProfile.identity_regional)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center">
-              <div className="flex items-center gap-3 mb-4 self-start w-full">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center animate-slide-up animation-delay-200">
+              <div className="flex items-center gap-2 mb-4 self-start w-full">
                 <Activity className="text-cyan-500" />
                 <h3 className="text-xl font-bold">{dict.results.you_vs_spain}</h3>
+                <div className="group relative">
+                  <Info className="w-4 h-4 text-gray-400 hover:text-cyan-400 cursor-help transition-colors" />
+                  <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                    Comparativa de tus valores en dimensiones culturales clave versus la media nacional española.
+                  </div>
+                </div>
               </div>
               
-              {/* Radar Chart */}
+              {/* Radar Chart con tooltips mejorados */}
               <div className="w-full h-64 text-xs mb-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
                     <PolarGrid stroke="#334155" />
                     <PolarAngleAxis dataKey="subject" stroke="#94a3b8" />
-                    <PolarRadiusAxis angle={30} domain={[0, 5]} tick={false} axisLine={false} />
+                    <PolarRadiusAxis angle={30} domain={[0, 10]} tick={false} axisLine={false} />
                     <Radar
                       name={dict.results.radar.you}
                       dataKey="A"
@@ -1160,7 +1587,19 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     />
                     <Legend />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', color: '#f1f5f9' }}
+                      contentStyle={{ 
+                        backgroundColor: '#0f172a', 
+                        borderColor: '#334155', 
+                        borderRadius: '8px',
+                        padding: '12px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)'
+                      }}
+                      labelStyle={{ color: '#f1f5f9', fontWeight: 'bold', marginBottom: '4px' }}
+                      itemStyle={{ color: '#cbd5e1' }}
+                      formatter={(value: number, name: string) => {
+                        const percentage = ((value / 10) * 100).toFixed(0);
+                        return [`${value.toFixed(1)}/10 (${percentage}%)`, name];
+                      }}
                     />
                   </RadarChart>
                 </ResponsiveContainer>
@@ -1171,9 +1610,15 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               
               {/* Political Quadrant */}
               <div className="w-full">
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-2 mb-4">
                   <Users className="text-purple-500" />
                   <h3 className="text-lg font-bold">{dict.results.political_position}</h3>
+                  <div className="group relative">
+                    <Info className="w-4 h-4 text-gray-400 hover:text-purple-400 cursor-help transition-colors" />
+                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                      Tu posición en el espectro político bidimensional (económico y social) comparada con el promedio español.
+                    </div>
+                  </div>
                 </div>
                 
                 <div className="relative w-full aspect-square max-w-sm mx-auto bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-4">
@@ -1200,7 +1645,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     className="absolute w-4 h-4 bg-pink-500 rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 z-10"
                     style={{
                       left: `${4 + (politicalX / 10) * 92}%`,
-                      top: `${4 + (politicalY / 10) * 92}%`
+                      top: `${96 - (politicalY / 10) * 92}%`
                     }}
                   >
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-pink-400">
@@ -1213,7 +1658,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     className="absolute w-3 h-3 bg-cyan-500 rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2"
                     style={{
                       left: `${4 + (NATIONAL_AVG.politics_leftright / 10) * 92}%`,
-                      top: `${4 + (NATIONAL_AVG.values_authority / 10) * 92}%`
+                      top: `${96 - (NATIONAL_AVG.values_authority / 10) * 92}%`
                     }}
                   >
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs text-cyan-400">
@@ -1222,9 +1667,63 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   </div>
                 </div>
                 
-                <div className="mt-4 text-center text-sm text-gray-400">
-                  <p>{dict.results.political_quadrants.left_right_axis}: <span className="text-white font-bold">{politicalX.toFixed(1)}/10</span></p>
-                  <p>{dict.results.political_quadrants.auth_lib_axis}: <span className="text-white font-bold">{politicalY.toFixed(1)}/10</span></p>
+                <div className="mt-4 text-center text-xs text-gray-500 space-y-1">
+                  <div>
+                    <span className="text-white font-semibold">{dict.results.political_quadrants.you}:</span> {politicalX.toFixed(1)}/10 {dict.results.political_quadrants.left_right_short} · {politicalY.toFixed(1)}/10 {dict.results.political_quadrants.auth_lib_short}
+                  </div>
+                </div>
+              </div>
+
+              {/* Political Parties Section */}
+              <div className="w-full mt-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Users className="text-amber-500" />
+                  <h3 className="text-lg font-bold">{dict.results.closest_parties}</h3>
+                  <div className="group relative">
+                    <Info className="w-4 h-4 text-gray-400 hover:text-amber-400 cursor-help transition-colors" />
+                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
+                      {dict.results.closest_parties_info}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-slate-800/50 to-slate-800/30 rounded-xl p-4 border border-slate-700/50">
+                  <div className="flex gap-6 justify-center items-center">
+                    {results.topParties.map((party, idx) => {
+                      const isRectangular = party.logo_shape === 'rectangular';
+                      return (
+                        <div key={party.id} className="flex flex-col items-center gap-2">
+                          <a 
+                            href={party.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="transition-all hover:scale-110 hover:brightness-110"
+                            title={`${party.name_es} - ${Math.round(party.similarity)}% ${dict.results.closest_parties_info || 'afín'}`}
+                          >
+                            <div className="relative">
+                              <img 
+                                src={party.logo} 
+                                alt={party.name_short}
+                                className={`${isRectangular ? 'w-20 h-16 rounded-lg' : 'w-16 h-16 rounded-full'} object-contain border-3 shadow-xl bg-white/5 p-1`}
+                                style={{ borderColor: party.color, borderWidth: '3px' }}
+                              />
+                              {idx === 0 && (
+                                <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-xs font-bold text-white shadow-lg border-2 border-slate-900">
+                                  1
+                                </div>
+                              )}
+                            </div>
+                          </a>
+                          <div className="text-center">
+                            <div className="text-sm font-bold" style={{ color: party.color }}>
+                              {party.name_short}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -1253,7 +1752,6 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               </a>
             </div>
           </div>
-          {/* Fin contenedor captura imagen */}
 
         </div>
       </div>

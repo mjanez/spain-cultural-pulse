@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "note": "Configuración de características especiales de las regiones españolas"
+  },
+  "regions": {
+    "cataluna": {
+      "id": "cataluna",
+      "nationalist": true,
+      "hasRegionalParties": true
+    },
+    "paisvasco": {
+      "id": "paisvasco",
+      "nationalist": true,
+      "hasRegionalParties": true
+    },
+    "galicia": {
+      "id": "galicia",
+      "nationalist": true,
+      "hasRegionalParties": true
+    },
+    "andalucia": {
+      "id": "andalucia",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "aragon": {
+      "id": "aragon",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "principado-asturias": {
+      "id": "principado-asturias",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "illes-balears": {
+      "id": "illes-balears",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "canarias": {
+      "id": "canarias",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "cantabria": {
+      "id": "cantabria",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "castilla-leon": {
+      "id": "castilla-leon",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "castilla-la-mancha": {
+      "id": "castilla-la-mancha",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "comunitat-valenciana": {
+      "id": "comunitat-valenciana",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "extremadura": {
+      "id": "extremadura",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "comunidad-madrid": {
+      "id": "comunidad-madrid",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "region-murcia": {
+      "id": "region-murcia",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "comunidad-foral-navarra": {
+      "id": "comunidad-foral-navarra",
+      "nationalist": false,
+      "hasRegionalParties": false
+    },
+    "la-rioja": {
+      "id": "la-rioja",
+      "nationalist": false,
+      "hasRegionalParties": false
+    }
+  }
+}

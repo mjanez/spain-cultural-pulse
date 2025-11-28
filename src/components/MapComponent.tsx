@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import geoData from '@/data/spain-communities.json';
+import geojsonMapping from '@/data/geojson-region-mapping.json';
 
 // Fix for Leaflet default icon issue in Next.js
 import L from 'leaflet';
@@ -19,31 +20,12 @@ L.Icon.Default.mergeOptions({
 });
 
 interface MapComponentProps {
-  scores: { region: string; diff: number }[];
+  scores: { region: string; regionId: string; displayName: string; diff: number }[];
   maxDistance?: number; // Distancia máxima dinámica para calcular afinidades
 }
 
-const GEOJSON_TO_PROFILE_NAME: Record<string, string> = {
-  "Andalucia": "Andalucía",
-  "Aragon": "Aragón",
-  "Asturias": "Principado de Asturias",
-  "Baleares": "Islas Baleares",
-  "Canarias": "Canarias",
-  "Cantabria": "Cantabria",
-  "Castilla-La Mancha": "Castilla-La Mancha",
-  "Castilla-Leon": "Castilla y León",
-  "Cataluña": "Cataluña",
-  "Ceuta": "Ceuta",
-  "Extremadura": "Extremadura",
-  "Galicia": "Galicia",
-  "La Rioja": "La Rioja",
-  "Madrid": "Comunidad de Madrid",
-  "Melilla": "Melilla",
-  "Murcia": "Región de Murcia",
-  "Navarra": "Comunidad Foral de Navarra",
-  "Pais Vasco": "País Vasco",
-  "Valencia": "Comunidad Valenciana"
-};
+// Usar mapeo importado desde JSON externo
+const GEOJSON_TO_REGION_ID: Record<string, string> = geojsonMapping;
 
 const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -57,10 +39,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
       return;
     }
 
-    // Create score map
     const scoreMap: Record<string, number> = {};
+    const displayNameMap: Record<string, string> = {};
     scores.forEach(s => {
-      scoreMap[s.region] = s.diff;
+      scoreMap[s.regionId] = s.diff;
+      displayNameMap[s.regionId] = s.displayName;
     });
 
     // Calculate min and max diff
@@ -70,7 +53,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
       maxDiff = Math.max(...scores.map(s => s.diff));
     }
 
-    const getColor = (diff: number | undefined, regionName?: string) => {
+    const getColor = (diff: number | undefined) => {
       if (diff === undefined) return '#334155';
       
       // Normalizar diff entre 0 (más afín) y 1 (menos afín)
@@ -85,12 +68,17 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
       return `rgb(${r}, ${g}, ${b})`;
     };
 
-    // Create map
     const map = L.map(mapContainerRef.current, {
       center: [35.85, -10.85],
       zoom: 4,
+      minZoom: 4,
+      maxZoom: 8,
       scrollWheelZoom: true,
-      attributionControl: true
+      doubleClickZoom: true,
+      dragging: true,
+      zoomControl: true,
+      attributionControl: true,
+      zoomAnimation: true
     });
 
     mapInstanceRef.current = map;
@@ -104,16 +92,16 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
     L.geoJSON(geoData as any, {
       style: (feature) => {
         const geoName = feature?.properties?.name;
-        const profileName = GEOJSON_TO_PROFILE_NAME[geoName];
-        const diff = profileName ? scoreMap[profileName] : undefined;
+        const regionId = GEOJSON_TO_REGION_ID[geoName];
+        const diff = regionId ? scoreMap[regionId] : undefined;
         
         // Encontrar la posición de esta región en el ranking
         const sortedScores = [...scores].sort((a, b) => a.diff - b.diff);
-        const position = sortedScores.findIndex(s => s.region === profileName) + 1;
+        const position = sortedScores.findIndex(s => s.regionId === regionId) + 1;
         const isTopOne = position === 1;
 
         return {
-          fillColor: getColor(diff, profileName),
+          fillColor: getColor(diff),
           weight: isTopOne ? 3 : 1,
           opacity: 1,
           color: isTopOne ? '#e2ee34ff' : 'white', // Borde verde para la #1
@@ -123,23 +111,49 @@ const MapComponent: React.FC<MapComponentProps> = ({ scores, maxDistance = 45 })
       },
       onEachFeature: (feature, layer) => {
         const geoName = feature.properties.name;
-        const profileName = GEOJSON_TO_PROFILE_NAME[geoName];
-        const diff = profileName ? scoreMap[profileName] : undefined;
+        const regionId = GEOJSON_TO_REGION_ID[geoName];
+        const diff = regionId ? scoreMap[regionId] : undefined;
+        const displayName = regionId ? displayNameMap[regionId] : geoName;
         
-        if (profileName && diff !== undefined) {
-          // Encontrar la posición de esta región en el ranking
+        if (regionId && diff !== undefined) {
           const sortedScores = [...scores].sort((a, b) => a.diff - b.diff);
-          const position = sortedScores.findIndex(s => s.region === profileName) + 1;
+          const position = sortedScores.findIndex(s => s.regionId === regionId) + 1;
           const totalRegions = sortedScores.length;
           
-          // Calcular grado de afinidad (1 es máxima, 19 es mínima)
-          const affinityScore = Math.round(1 + ((position - 1) / (totalRegions - 1)) * 18) || 1;
-          
-          const affinityLabel = `#${position} - Afinidad: ${affinityScore}/19`;
+          const emoji = position === 1 ? '🏆' : position <= 3 ? '⭐' : position <= 5 ? '✨' : '📍';
+
+          const tooltipContent = `
+            <div style="font-size: 13px; line-height: 1.6;">
+              <strong style="font-size: 14px;">${emoji} ${displayName}</strong><br/>
+              <span style="color: #10b981;">Ranking: #${position}/${totalRegions}</span>
+            </div>
+          `;
             
-          layer.bindTooltip(`${profileName}<br/>${affinityLabel}`, {
+          layer.bindTooltip(tooltipContent, {
             sticky: true,
-            direction: 'top'
+            direction: 'top',
+            className: 'custom-tooltip',
+            opacity: 0.95
+          });
+
+          layer.on({
+            mouseover: (e) => {
+              const hoveredLayer = e.target;
+              hoveredLayer.setStyle({
+                weight: 3,
+                color: '#ec4899',
+                fillOpacity: 0.9
+              });
+            },
+            mouseout: (e) => {
+              const hoveredLayer = e.target;
+              const isTopOne = position === 1;
+              hoveredLayer.setStyle({
+                weight: isTopOne ? 3 : 1,
+                color: isTopOne ? '#16a34a' : 'white',
+                fillOpacity: isTopOne ? 0.95 : 0.7
+              });
+            }
           });
         } else {
           layer.bindTooltip(geoName, { sticky: true });

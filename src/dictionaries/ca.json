@@ -99,9 +99,10 @@
     "copy_link": "Copiar enllaç",
     "link_copied": "Enllaç copiat al porta-retalls!",
     "image_downloaded": "Imatge descarregada!",
-    "share_failed": "No s'ha pogut compartir. Prova de copiar l'enllaç.",
-    "your_tribe": "La teva tribu cultural és",
-    "political_position": "La teva posició política",
+    "share_failed": "No s'ha pogut compartir. Prova de copiar l'enllaç.",    "share_twitter": "Descobreix el teu perfil cultural a Espanya!",
+    "share_whatsapp": "Mira el meu perfil cultural a Espanya!",    "your_tribe": "La teva tribu cultural és",
+    "political_position": "La teva posició política",    "closest_parties": "Partits més afins",
+    "closest_parties_info": "Els 3 partits polítics amb posicions més properes a la teva posició política.",
     "political_quadrants": {
       "auth_left": "Esq. Autoritària",
       "auth_right": "Dre. Autoritària",
@@ -114,12 +115,17 @@
       "you": "Tu",
       "spain": "Espanya",
       "left_right_axis": "Esquerra-Dreta",
-      "auth_lib_axis": "Autoritari-Llibertari"
+      "auth_lib_axis": "Autoritari-Llibertari",
+      "left_right_short": "esq-dre",
+      "auth_lib_short": "aut-llib"
     },
     "tribe_desc": "Els teus patrons de consum cultural i valors socials et distingeixen de la mitjana nacional, inclinant-te cap a un perfil únic.",
     "cultural_home": "La teva \"Llar\" Cultural",
     "affinity": "La teva major afinitat és amb:",
     "top_3": "Top 3 Afinitats Regionals",
+    "identity_label": "La Teva Identitat",
+    "identity_spanish": "Espanyola",
+    "identity_regional": "Regional",
     "you_vs_spain": "Tu vs. Espanya",
     "comparison_desc": "Comparativa dels teus gustos amb la mitjana de l'estudi NORPOL 2024.",
     "info": "Aquesta anàlisi utilitza dades de l'<a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudi sobre Normes Socials a la Política 2024</strong></a>. Els perfils regionals s'han calculat agregant les respostes dels 3.015 participants originals i buscant la menor distància vectorial amb les teves preferències.",    "attribution": {
@@ -177,8 +183,34 @@
     },
     "working_class_rooted": {
       "name": "Popular arrelat",
-      "description": "Classe treballadora, orgull local, futbol, tradicions populars"
-    }
+      "description": "Classe treballadora, orgull local, futbol, tradicions populars"    },
+    "liberal_cosmopolitan": {
+      "name": "Liberal cosmopolita",
+      "description": "Obertura global, cultura internacional, llibertats individuals, tolerància"
+    },
+    "nationalist_conservative": {
+      "name": "Conservador nacionalista",
+      "description": "Orgull patriòtic, valors tradicionals, autoritat, família"
+    },
+    "economic_liberal": {
+      "name": "Liberal econòmic",
+      "description": "Centre-dreta, emprenedoria, llibertat econòmica, socialment tolerant"
+    },
+    "left_moderate": {
+      "name": "Esquerra moderada",
+      "description": "Socialdemocràcia, igualtat, drets socials, pragmatisme"
+    },
+    "sports_enthusiast": {
+      "name": "Apassionat de l'esport",
+      "description": "Vida activa, futbol, companyonia, esdeveniments esportius"
+    },
+    "cultural_intellectual": {
+      "name": "Intel·lectual cultural",
+      "description": "Arts, literatura, museus, pensament crític"
+    },
+    "regional_traditionalist": {
+      "name": "Tradicionalista regional",
+      "description": "Identitat territorial, costums locals, llengua pròpia, comunitat"    }
   },
   "match": {
     "title": "Troba la teva regió ideal",

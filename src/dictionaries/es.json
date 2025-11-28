@@ -100,8 +100,12 @@
     "link_copied": "¡Enlace copiado al portapapeles!",
     "image_downloaded": "¡Imagen descargada!",
     "share_failed": "No se pudo compartir. Intenta copiar el enlace.",
+    "share_twitter": "¡Descubre tu perfil cultural en España!",
+    "share_whatsapp": "¡Mira mi perfil cultural en España!",
     "your_tribe": "Tu Tribu Cultural es",
     "political_position": "Tu Posición Política",
+    "closest_parties": "Partidos más afines",
+    "closest_parties_info": "Los 3 partidos políticos con posiciones más cercanas a tu posición política.",
     "political_quadrants": {
       "auth_left": "Izq. Autoritaria",
       "auth_right": "Der. Autoritaria",
@@ -114,12 +118,17 @@
       "you": "Tú",
       "spain": "España",
       "left_right_axis": "Izquierda-Derecha",
-      "auth_lib_axis": "Autoritario-Libertario"
+      "auth_lib_axis": "Autoritario-Libertario",
+      "left_right_short": "izq-der",
+      "auth_lib_short": "aut-lib"
     },
     "tribe_desc": "Tus patrones de consumo cultural y valores sociales te distinguen del promedio nacional, inclinándote hacia un perfil único.",
     "cultural_home": "Tu \"Hogar\" Cultural",
     "affinity": "Tu mayor afinidad es con:",
     "top_3": "Top 3 Afinidades Regionales",
+    "identity_label": "Tu Identidad",
+    "identity_spanish": "Española",
+    "identity_regional": "Regional",
     "you_vs_spain": "Tú vs. España",
     "comparison_desc": "Comparativa de tus gustos con la media del estudio NORPOL 2024.",
     "info": "Este análisis utiliza datos del <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudio sobre Normas Sociales en la Política 2024</strong></a>. Los perfiles regionales se han calculado agregando las respuestas de los 3,015 participantes originales y buscando la menor distancia vectorial con tus preferencias.",
@@ -157,28 +166,56 @@
   },
   "tribes": {
     "conservative_traditional": {
-      "name": "Conservador Tradicional",
+      "name": "Conservador tradicional",
       "description": "Valores tradicionales, familia, religioso, conservador"
     },
     "progressive_urban": {
-      "name": "Progresista Urbano",
+      "name": "Progresista urbano",
       "description": "Cosmopolita, progresista, cultural, movilidad sostenible"
     },
     "young_partygoer": {
-      "name": "Joven Fiestero",
+      "name": "Joven fiestero",
       "description": "Música urbana, fiesta, ocio nocturno, redes sociales"
     },
     "middle_class_moderate": {
-      "name": "Clase Media Moderada",
+      "name": "Clase media moderada",
       "description": "Centrista, pragmático, familia y trabajo"
     },
     "ecologist_alternative": {
-      "name": "Ecologista Alternativo",
+      "name": "Ecologista alternativo",
       "description": "Medio ambiente, consumo responsable, indie, sostenibilidad"
     },
     "working_class_rooted": {
-      "name": "Popular Arraigado",
+      "name": "Popular arraigado",
       "description": "Clase trabajadora, orgullo local, fútbol, tradiciones populares"
+    },
+    "liberal_cosmopolitan": {
+      "name": "Liberal cosmopolita",
+      "description": "Apertura global, cultura internacional, libertades individuales, tolerancia"
+    },
+    "nationalist_conservative": {
+      "name": "Conservador Nacionalista",
+      "description": "Orgullo patrio, valores tradicionales, autoridad, familia"
+    },
+    "economic_liberal": {
+      "name": "Liberal económico",
+      "description": "Centro-derecha, emprendimiento, libertad económica, socialmente tolerante"
+    },
+    "left_moderate": {
+      "name": "Izquierda moderada",
+      "description": "Socialdemocracia, igualdad, derechos sociales, pragmatismo"
+    },
+    "sports_enthusiast": {
+      "name": "Apasionado del deporte",
+      "description": "Vida activa, fútbol, camaradería, eventos deportivos"
+    },
+    "cultural_intellectual": {
+      "name": "Intelectual cultural",
+      "description": "Artes, literatura, museos, pensamiento crítico"
+    },
+    "regional_traditionalist": {
+      "name": "Tradicionalista regional",
+      "description": "Identidad territorial, costumbres locales, lengua propia, comunidad"
     }
   },
   "match": {
