@@ -258,7 +258,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           {currentLang === 'val' ? (
             <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
               <Image 
-                src="/flags/simple/val.png" 
+                src={`${process.env.PAGES_BASE_PATH || ''}/flags/simple/val.jpg`}
                 alt="Valencian flag" 
                 width={16} 
                 height={16} 
@@ -351,7 +351,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
           >
             <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
               <Image 
-                src="/flags/simple/val.png" 
+                src={`${process.env.PAGES_BASE_PATH || ''}/flags/simple/val.jpg`}
                 alt="Valencian flag" 
                 width={21} 
                 height={16} 
@@ -1255,7 +1255,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   {currentLang === 'val' ? (
                     <div className="w-5 h-5 overflow-hidden rounded-sm flex-shrink-0">
                       <Image 
-                        src="/flags/simple/val.png" 
+                        src={`${process.env.PAGES_BASE_PATH || ''}/flags/simple/val.jpg`}
                         alt="Valencian flag" 
                         width={20} 
                         height={20} 
@@ -1346,7 +1346,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     >
                       <div className="w-4 h-4 overflow-hidden rounded-sm flex-shrink-0">
                         <Image 
-                          src="/flags/simple/val.png" 
+                          src={`${process.env.PAGES_BASE_PATH || ''}/flags/simple/val.jpg`}
                           alt="Valencian flag" 
                           width={21} 
                           height={16} 
