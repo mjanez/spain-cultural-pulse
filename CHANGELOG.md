@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [v1.0.1](https://github.com/mjanez/spain-cultural-pulse/releases/tag/v1.0.1) - 2025-11-29 12:08:54+00:00
+
+## What's Changed
+* docs(CHANGELOG): update release notes for v1.0.0 by @github-actions[bot] in https://github.com/mjanez/spain-cultural-pulse/pull/9
+* Fix valencian flag by @mjanez in https://github.com/mjanez/spain-cultural-pulse/pull/10
+
+## New Contributors
+* @github-actions[bot] made their first contribution in https://github.com/mjanez/spain-cultural-pulse/pull/9
+
+**Full Changelog**: https://github.com/mjanez/spain-cultural-pulse/compare/v1.0.0...v1.0.1
+
 ## [v1.0.0](https://github.com/mjanez/spain-cultural-pulse/releases/tag/v1.0.0) - 2025-11-29 11:54:00+00:00
 
 ## What's Changed
