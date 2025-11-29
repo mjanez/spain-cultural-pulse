@@ -1403,7 +1403,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   <div className="group relative">
                     <Info className="w-4 h-4 text-gray-400 hover:text-pink-400 cursor-help transition-colors" />
                     <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
-                      Tu región ideal calculada comparando tus respuestas con los perfiles regionales del dataset NORPOL 2024 (3,015 personas).
+                      {dict.results.cultural_home_tooltip}
                     </div>
                   </div>
                 </div>
@@ -1422,18 +1422,18 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                   <div className="flex items-center justify-center gap-2 text-sm">
                     <TrendingUp className="w-4 h-4 text-indigo-400" />
                     <span className="text-gray-300">
-                      Similitud con la media: <span className="font-bold text-indigo-300">{results.similarityIndex}/10</span>
+                      {dict.results.similarity_with_avg}: <span className="font-bold text-indigo-300">{results.similarityIndex}/10</span>
                       <span className="text-xs text-gray-400 ml-2">({results.similarityCategory})</span>
                     </span>
                     <div className="group relative">
                       <Info className="w-3.5 h-3.5 text-gray-400 hover:text-indigo-400 cursor-help transition-colors" />
                       <div className="absolute left-0 top-6 w-72 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
-                        Índice de similitud cultural con el promedio español (1-10). Mide tu cercanía al perfil medio nacional en música, política, valores sociales, identidad, cultura, movilidad y gastronomía. Mayor valor = más cercano al español promedio.
+                        {dict.results.similarity_tooltip}
                       </div>
                     </div>
                   </div>
                   <p className="text-xs text-gray-400 mt-1">
-                    <span className="font-semibold text-green-400">{results.regionsCloser}</span> de 17 regiones están más cerca de la media que tú
+                    <span className="font-semibold text-green-400">{results.regionsCloser}</span> {dict.results.regions_closer_text}
                   </p>
                 </div>
               </div>
@@ -1514,7 +1514,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     <div className="flex items-center gap-1.5">
                       <div className="w-5 h-5 rounded border border-slate-600 overflow-hidden shadow-sm flex-shrink-0">
                         <Image 
-                          src="/flags/españa.jpg"
+                          src={`${process.env.PAGES_BASE_PATH || ''}/flags/españa.jpg`}
                           alt="España"
                           width={20}
                           height={20}
