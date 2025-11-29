@@ -1514,7 +1514,7 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                     <div className="flex items-center gap-1.5">
                       <div className="w-5 h-5 rounded border border-slate-600 overflow-hidden shadow-sm flex-shrink-0">
                         <Image 
-                          src="/flags/españa.jpg"
+                          src={`${process.env.PAGES_BASE_PATH || ''}/flags/españa.jpg`}
                           alt="España"
                           width={20}
                           height={20}
