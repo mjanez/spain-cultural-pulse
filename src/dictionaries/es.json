@@ -148,20 +148,20 @@
       "gastronomy": "Gastronomía",
       "mobility": "Movilidad",
       "you": "Tú",
-      "national_avg": "Media Nacional",
+      "national_avg": "Media nacional",
       "music": "Música",
       "politics": "Política",
-      "social_values": "Valores Sociales",
+      "social_values": "Sociedad",
       "identity": "Identidad",
       "culture": "Cultura"
     },
     "tribes": {
-      "average": "Ciudadano Promedio",
-      "rebel": "Rebelde Alternativo",
-      "guardian": "Guardián de la Tradición",
-      "party": "Alma de la Fiesta",
-      "optimist": "Optimista Radical",
-      "explorer": "Explorador Hedonista"
+      "average": "Ciudadano promedio",
+      "rebel": "Rebelde alternativo",
+      "guardian": "Guardián de la tradición",
+      "party": "Alma de la fiesta",
+      "optimist": "Optimista radical",
+      "explorer": "Explorador hedonista"
     }
   },
   "tribes": {
