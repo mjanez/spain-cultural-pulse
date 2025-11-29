@@ -39,3 +39,7 @@ scripts
 dev
 data/*.pdf
 .vscode
+
+# Data
+data
+!data/*.json
