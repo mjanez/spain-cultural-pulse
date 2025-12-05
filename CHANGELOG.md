@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [v1.0.2](https://github.com/mjanez/spain-cultural-pulse/releases/tag/v1.0.2) - 2025-12-05 12:05:40+00:00
+
+## What's Changed
+* docs(CHANGELOG): update release notes for v1.0.1 by @github-actions[bot] in https://github.com/mjanez/spain-cultural-pulse/pull/11
+* feat: add Tooltip component using Radix UI by @mjanez in https://github.com/mjanez/spain-cultural-pulse/pull/12
+* Develop by @mjanez in https://github.com/mjanez/spain-cultural-pulse/pull/13
+
+
+**Full Changelog**: https://github.com/mjanez/spain-cultural-pulse/compare/v1.0.1...v1.0.2
+
+### Features
+
+- general:
+  - add Tooltip component using Radix UI ([0173d60](https://github.com/mjanez/spain-cultural-pulse/commit/0173d60dfa90309f3bf7e02c9f18fe44b22abd50)) ([#12](https://github.com/mjanez/spain-cultural-pulse/pull/12))
+
 ## [v1.0.1](https://github.com/mjanez/spain-cultural-pulse/releases/tag/v1.0.1) - 2025-11-29 12:08:54+00:00
 
 ## What's Changed
