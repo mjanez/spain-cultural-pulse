@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { Tooltip as InfoTooltip } from './Tooltip';
 import html2canvas from 'html2canvas';
 import { 
   MapPin, 
@@ -1059,13 +1060,14 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 min={q.min} 
                 max={q.max} 
                 step={q.step}
+                value={answers[q.id] !== undefined ? answers[q.id] : (q.min + q.max) / 2}
                 title={q.text}
                 className="w-full h-4 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-pink-500 hover:accent-pink-400"
                 onChange={(e) => handleAnswer(parseFloat(e.target.value))}
               />
               
               <div className="text-center text-3xl font-bold text-white/90">
-                {answers[q.id] ?? "?"}
+                {answers[q.id] !== undefined ? answers[q.id] : "?"}
               </div>
             </div>
 
@@ -1400,12 +1402,9 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 <div className="flex items-center gap-2">
                   <MapPin className="text-pink-500" />
                   <h3 className="text-xl font-bold">{dict.results.cultural_home}</h3>
-                  <div className="group relative">
+                  <InfoTooltip content={dict.results.cultural_home_tooltip}>
                     <Info className="w-4 h-4 text-gray-400 hover:text-pink-400 cursor-help transition-colors" />
-                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
-                      {dict.results.cultural_home_tooltip}
-                    </div>
-                  </div>
+                  </InfoTooltip>
                 </div>
               </div>
               
@@ -1425,12 +1424,9 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                       {dict.results.similarity_with_avg}: <span className="font-bold text-indigo-300">{results.similarityIndex}/10</span>
                       <span className="text-xs text-gray-400 ml-2">({results.similarityCategory})</span>
                     </span>
-                    <div className="group relative">
+                    <InfoTooltip content={dict.results.similarity_tooltip}>
                       <Info className="w-3.5 h-3.5 text-gray-400 hover:text-indigo-400 cursor-help transition-colors" />
-                      <div className="absolute left-0 top-6 w-72 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
-                        {dict.results.similarity_tooltip}
-                      </div>
-                    </div>
+                    </InfoTooltip>
                   </div>
                   <p className="text-xs text-gray-400 mt-1">
                     <span className="font-semibold text-green-400">{results.regionsCloser}</span> {dict.results.regions_closer_text}
@@ -1554,12 +1550,9 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
               <div className="flex items-center gap-2 mb-4 self-start w-full">
                 <Activity className="text-cyan-500" />
                 <h3 className="text-xl font-bold">{dict.results.you_vs_spain}</h3>
-                <div className="group relative">
+                <InfoTooltip content={dict.results.you_vs_spain_tooltip}>
                   <Info className="w-4 h-4 text-gray-400 hover:text-cyan-400 cursor-help transition-colors" />
-                  <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
-                    Comparativa de tus valores en dimensiones culturales clave versus la media nacional española.
-                  </div>
-                </div>
+                </InfoTooltip>
               </div>
               
               {/* Radar Chart con tooltips mejorados */}
@@ -1613,12 +1606,9 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 <div className="flex items-center gap-2 mb-4">
                   <Users className="text-purple-500" />
                   <h3 className="text-lg font-bold">{dict.results.political_position}</h3>
-                  <div className="group relative">
+                  <InfoTooltip content={dict.results.political_position_tooltip}>
                     <Info className="w-4 h-4 text-gray-400 hover:text-purple-400 cursor-help transition-colors" />
-                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
-                      Tu posición en el espectro político bidimensional (económico y social) comparada con el promedio español.
-                    </div>
-                  </div>
+                  </InfoTooltip>
                 </div>
                 
                 <div className="relative w-full aspect-square max-w-sm mx-auto bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-4">
@@ -1679,12 +1669,9 @@ export default function CulturalPulseApp({ dict, lang }: { dict: any, lang?: str
                 <div className="flex items-center gap-2 mb-4">
                   <Users className="text-amber-500" />
                   <h3 className="text-lg font-bold">{dict.results.closest_parties}</h3>
-                  <div className="group relative">
+                  <InfoTooltip content={dict.results.closest_parties_info}>
                     <Info className="w-4 h-4 text-gray-400 hover:text-amber-400 cursor-help transition-colors" />
-                    <div className="absolute left-0 top-6 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl">
-                      {dict.results.closest_parties_info}
-                    </div>
-                  </div>
+                  </InfoTooltip>
                 </div>
                 
                 <div className="bg-gradient-to-r from-slate-800/50 to-slate-800/30 rounded-xl p-4 border border-slate-700/50">
