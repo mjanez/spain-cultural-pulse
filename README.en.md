@@ -5,6 +5,10 @@
 Interactive webapp to explore culture, values, and politics in contemporary Spain through visualizations powered by open data.
 
 - **[View Demo](https://mjanez.github.io/spain-cultural-pulse)**
+
+![Web app screenshot](docs/img/spain-cultural-pulse-web.png)
+![Captura de pantalla de la aplicación: móvil](docs/img/spain-cultural-pulse-mobile.png)
+
 ## About
 
 Web application built with Next.js that enables analysis and visualization of cultural and social patterns in Spain. Data comes from a representative survey of 3,000 Spanish adults conducted in 2024.
