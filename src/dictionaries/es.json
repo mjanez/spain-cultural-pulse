@@ -34,7 +34,7 @@
     "results": "Ver Resultados",
     "back_home": "Volver al inicio",
     "calculating": "Analizando tu ADN cultural...",
-    "comparing": "Comparando con 3,000 encuestados del CSIC",
+    "comparing": "Comparando con 3.000 encuestados del CSIC",
     "categories": {
       "culture": "Cultura",
       "values": "Valores",
@@ -134,6 +134,8 @@
     "similarity_with_avg": "Similitud con la media",
     "similarity_tooltip": "Índice de similitud cultural con el promedio español (1-10). Mide tu cercanía al perfil medio nacional en música, política, valores sociales, identidad, cultura, movilidad y gastronomía. Mayor valor = más cercano al español promedio.",
     "regions_closer_text": "de 17 regiones están más cerca de la media que tú",
+    "you_vs_spain_tooltip": "Comparativa de tus valores en dimensiones culturales clave versus la media nacional española.",
+    "political_position_tooltip": "Tu posición en el espectro político bidimensional (económico y social) comparada con el promedio español.",
     "you_vs_spain": "Tú vs. España",
     "comparison_desc": "Comparativa de tus gustos con la media del estudio NORPOL 2024.",
     "info": "Este análisis utiliza datos del <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudio sobre Normas Sociales en la Política 2024</strong></a>. Los perfiles regionales se han calculado agregando las respuestas de los 3,015 participantes originales y buscando la menor distancia vectorial con tus preferencias.",
