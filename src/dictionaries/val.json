@@ -131,6 +131,8 @@
     "similarity_with_avg": "Similitud amb la mitjana",
     "similarity_tooltip": "Índex de similitud cultural amb el promig espanyol (1-10). Mesura la teua proximitat al perfil mitjà nacional en música, política, valors socials, identitat, cultura, mobilitat i gastronomia. Major valor = més pròxim al promig espanyol.",
     "regions_closer_text": "de 17 regions estan més prop de la mitjana que tu",
+    "you_vs_spain_tooltip": "Comparativa dels teus valors en dimensions culturals clau versus la mitjana nacional espanyola.",
+    "political_position_tooltip": "La teua posició en l'espectre polític bidimensional (econòmic i social) comparada amb el promig espanyol.",
     "you_vs_spain": "Tu vs. Espanya",
     "comparison_desc": "Comparativa dels teus gustos amb la mitjana de l'estudi NORPOL 2024.",
     "info": "Aquesta anàlisi utilitza dades de l'<a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Estudi sobre Normes Socials a la Política 2024</strong></a>. Els perfils regionals s'han calculat agregant les respostes dels 3.015 participants originals i buscant la menor distància vectorial amb les teues preferències.",    "attribution": {

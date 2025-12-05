@@ -134,6 +134,8 @@
     "similarity_with_avg": "Similarity with average",
     "similarity_tooltip": "Cultural similarity index with the Spanish average (1-10). Measures your closeness to the national average profile in music, politics, social values, identity, culture, mobility and gastronomy. Higher value = closer to Spanish average.",
     "regions_closer_text": "out of 17 regions are closer to the average than you",
+    "you_vs_spain_tooltip": "Comparison of your values in key cultural dimensions versus the Spanish national average.",
+    "political_position_tooltip": "Your position in the two-dimensional political spectrum (economic and social) compared to the Spanish average.",
     "you_vs_spain": "You vs. Spain",
     "comparison_desc": "Comparison of your tastes with the average from the NORPOL 2024 study.",
     "info": "This analysis uses data from the <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\">Study on Social Norms in Politics 2024</a>. Regional profiles have been calculated by aggregating responses from the 3,015 original participants and finding the smallest vector distance to your preferences.",    "attribution": {

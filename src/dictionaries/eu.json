@@ -133,6 +133,8 @@
     "similarity_with_avg": "Batez bestekoarekin antzekotasuna",
     "similarity_tooltip": "Espainiako batez bestekoarekin kultur antzekotasun indizea (1-10). Zure hurbiltasuna neurtzen du musika, politika, balio sozialak, identitatea, kultura, mugikortasuna eta gastronomian. Balio handiagoa = Espainiako batez bestekotik hurbilago.",
     "regions_closer_text": "17 eskualdeetatik batez bestekotik hurbilago daude zu baino",
+    "you_vs_spain_tooltip": "Zure balioen konparaketa kultur dimentsio nagusietan Espainiako batez bestekoarekin.",
+    "political_position_tooltip": "Zure posizioa espektro politiko bi-dimentsionalean (ekonomikoa eta soziala) Espainiako batez bestekoarekin alderatuta.",
     "you_vs_spain": "Zu vs. Espainia",
     "comparison_desc": "Zure gust oen konparaketa NORPOL 2024 azterlanaren batez bestekoarekin.",
     "info": "Analisi honek <a href=\"https://datos.gob.es/es/catalogo/ea0020951-estudio-sobre-normas-sociales-en-la-politica-2024\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Politikaren Arau Sozialen Gaineko Ikerketaren 2024ko datuak</strong></a> erabiltzen ditu. Eskualde profilak jatorrizko 3.015 partaideen erantzunak batu eta zure lehentasunekin distantzia bektorial txikiena bilatuz kalkulatu dira.",
