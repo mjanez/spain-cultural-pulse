@@ -4,7 +4,8 @@
 
 Aplicación web interactiva para explorar cultura, valores y política en España contemporánea a través de visualizaciones que se nutren de datos abiertos.
 
-- **[Ver Demo](https://mjanez.github.io/spain-cultural-pulse)**
+>[!TIP]
+> - **[Ver Demo](https://mjanez.github.io/spain-cultural-pulse)**
 
 ![Captura de pantalla de la aplicación: web](docs/img/spain-cultural-pulse-web.png)
 ![Captura de pantalla de la aplicación: móvil](docs/img/spain-cultural-pulse-mobile.png)
