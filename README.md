@@ -13,7 +13,7 @@ Aplicación web interactiva para explorar cultura, valores y política en Españ
 
 ## Sobre el proyecto
 
-Desarrollada con Next.js que permite analizar y visualizar patrones culturales y sociales en España. Los datos provienen de una encuesta representativa de 3.000 adultos españoles realizada en 2024.
+Desarrollada con Next.js, permite analizar y visualizar patrones culturales y sociales en España. Los datos provienen de una encuesta representativa de 3.000 adultos españoles realizada en 2024.
 
 ## Tecnologías
 
@@ -29,10 +29,6 @@ Basado en el [Estudio sobre Normas Sociales en la Política, 2024](https://datos
 > **Muestra:** 3.000 adultos españoles (encuesta online, junio 2024)  
 > **Panel:** Netquest  
 > **Representatividad:** género, edad, educación, región y tamaño de municipio
-
-## Licencia
-
-Este proyecto está licenciado bajo [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). Puedes usar, compartir y adaptar este trabajo siempre que des la atribución apropiada.
 
 ## Qué analiza
 

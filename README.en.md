@@ -7,7 +7,7 @@ Interactive webapp to explore culture, values, and politics in contemporary Spai
 - **[View Demo](https://mjanez.github.io/spain-cultural-pulse)**
 
 ![Web app screenshot](docs/img/spain-cultural-pulse-web.png)
-![Captura de pantalla de la aplicación: móvil](docs/img/spain-cultural-pulse-mobile.png)
+![Mobile app screenshot](docs/img/spain-cultural-pulse-mobile.png)
 
 ## About
 
@@ -27,10 +27,6 @@ Based on the [Study on Social Norms in Politics, 2024](https://datos.gob.es/es/c
 >**Sample:** 3,000 Spanish adults (online survey, June 2024)  
 >**Panel:** Netquest  
 >**Representative by:** gender, age, education, region, and municipality size
-
-## License
-
-This project is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). You are free to use, share, and adapt this work as long as you provide appropriate attribution.
 
 ## What it covers
 
